@@ -1,5 +1,5 @@
 /*global escape: true */
-$.import("SurveyRocks.services","utils");
+$.import(".services","utils");
 var obj,body,action,action1,action2;
 if($.request.body){
 	body = $.request.body.asString();
@@ -14,11 +14,11 @@ if($.request.body){
 $.trace.error(obj.param1)
  
 var callFunction=function(){
-	var connection = $.hdb.getConnection({sqlcc:"SurveyRocks.services.api::services"});
+	var connection = $.hdb.getConnection({sqlcc:".services.api::services"});
 	var code = 0;		
 
 	try{					
-			var fnSell   = connection.loadProcedure('SURVEYROCKS','SendSurveyForPopUp');
+			var fnSell   = connection.loadProcedure('SURVEYROCKS','SendorPopUp');
 			var result = fnSell(obj);
 
 			connection.commit();			
@@ -32,7 +32,7 @@ var callFunction=function(){
 	catch (e) {
 	 	$.response.contentType = "application/json";			   
 	    $.response.headers.set("access-control-allow-headers","Origin, X-Requested-With, Content-Type, Accept");
-	    code = $.SurveyRocks.services.utils.SurveyRocksUtils.getStatusCode(e.message);
+	    code = $..services.utils..getStatusCode(e.message);
 	    if (code && code === 301) {
 	        $.response.setBody('unique constraint violated');
 	    } else {
