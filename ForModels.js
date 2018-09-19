@@ -103,14 +103,14 @@ var timeGlobal;
 var LeaderboardObject = function () {
 	var self = this;
 	self.Username = ko.observable();
-	self.NumberTakenSurveys = ko.observable(0);
+	self.NumberTaken = ko.observable(0);
 	self.RankText = ko.observable('');
 	self.RankImage = ko.observable('');
 	self.NextRankNumberRemaining = ko.observable(0);
 	self.NextRankText = ko.observable('');
 	self.Percentage = ko.observable('0%');
 	self.PercentagePixels = ko.observable('0%');
-	//self.MaxNumberTakenSurveys = ko.observable(0);
+
 	
 	self.LeaderboardList = ko.observableArray();
 	
@@ -134,10 +134,10 @@ var LeaderboardObject = function () {
     		        	$.each(res, function(index, value) {
     		        		leaderboardSingleObject = new LeaderboardSingleObject();
     		        		leaderboardSingleObject.IdLeaderboard = index+1;
-    		        		leaderboardSingleObject.NumberTakenSurveys = value.NumberTakenSurveys;
+    		        		leaderboardSingleObject.NumberTaken = value.;
     		        		leaderboardSingleObject.FirstName = value.FirstName;
     		        		leaderboardSingleObject.Country = value.Country;
-    		        		leaderboardSingleObject.RankText = checkRankingByNumberSurveys(value.NumberTakenSurveys).RankText;
+    		        		leaderboardSingleObject.RankText = (value.).RankText;
     		        		self.LeaderboardList.push(leaderboardSingleObject);
     		        		
     		        	});
@@ -169,13 +169,13 @@ var LeaderboardObject = function () {
  		        	//console.log(res);
  		        	var checkR;
  		        	if(res[0]){
- 		        		checkR = checkRankingByNumberSurveys(res[0].NumberTakenSurveys);
- 		        		self.NumberTakenSurveys(res[0].NumberTakenSurveys);
+ 		        		checkR = checkRankingByNumb(res[0].NumberTake);
+ 		        		self.NumberTaken(res[0].NumberTaken);
  		        	} 
  		        	else{
  		        		console.log("NO surv taken");
- 		        		checkR = checkRankingByNumberSurveys(0);
- 		        		self.NumberTakenSurveys(0);
+ 		        		checkR = checkRankingByNumber(0);
+ 		        		self.NumberTaken(0);
  		        	}
  		        		self.RankText(checkR.RankText);
 		        		self.NextRankNumberRemaining(checkR.NextRankNumberRemaining);
@@ -338,13 +338,13 @@ var NotificationsObject = function () {
 var LeaderboardSingleObject = function () { 
 	var self = this;
 	self.IdLeaderboard = ko.observable();
-	self.NumberTakenSurveys = ko.observable(0);
+	self. = ko.observable(0);
 	self.FirstName = ko.observable('');
 	self.Country = ko.observable(''); 
 	self.RankText = ko.observable('');
 };
 
-function checkRankingByNumberSurveys(numb){
+function checkRanking(numb){
 	var rankObject={};
 	var numint = parseInt(numb,10);
 	if(numint >= 0 && numint < 2){
@@ -389,21 +389,18 @@ function checkRankingByNumberSurveys(numb){
 };
 
 
-var SurveysForUserObject = function () {
+var serObject = function () {
 	
     var self = this;
-    self.IdSurvey = ko.observable();
+    self. = ko.observable();
     self.Title = ko.observable();
     self.Description = ko.observable();
     self.IsPublic = ko.observable();
     self.IsAnonymous = ko.observable();
-    self.IsTest = ko.observable();
-    self.ActiveSurveysCount = ko.observable(0);
-    self.CompletedSurveysCount = ko.observable(0);
-    self.currentActiveSurveysList = ko.observableArray();
+
     
     
-    self.GetActiveSurveysForUser=function(){
+    self.GetActivForUser=function(){
     	var r = $.Deferred();
 //    	 var token = localStorage.getItem('t');
 //    	 if(token){
@@ -414,20 +411,20 @@ var SurveysForUserObject = function () {
     		        data: JSON.stringify(params),
     		        cache: false,
     		        crossDomain: true,
-    		        url: urlString + "services/GetActiveSurveysForUser.xsjs",
+    		        url: urlString + "services/GetActsForUser.xsjs",
 //    		        + "?token="+encodeURIComponent(token),
     		        type: 'POST',
     		        error: function (x, s, m) {
     		            
     		        },
     		        success: function (res) {
-	    		        	self.currentActiveSurveysList(res);
+	    		        	self.currentActist(res);
 	    		        	console.log(res);
-	    		        	self.ActiveSurveysCount(res.length);
+	    		        	self.ActivCount(res.length);
 	    		        	if(res.length==0){
-	    		        		$("#msgEmptySurveyList").css("display","block");
+	    		        		$("#msst").css("display","block");
 	    		        	}else{
-	    		        		$("#msgEmptySurveyList").css("display","none");
+	    		        		$("#ist").css("display","none");
 	    		        	}
     		        	r.resolve(res);
     		        	
@@ -438,10 +435,10 @@ var SurveysForUserObject = function () {
 		return r;
     };
     
-    self.goToSurvey = function($data) {
+    self.goTo = function($data) {
     	homeModelObject.checkIfSessionExpired().done(function(data){	
 			if(homeModelObject.IsLoggedIn()){
-	    		goToSurveyRedirect($data.IdSurvey);
+	    		goTdirect($data.);
 						
 			}else{
 				window.onbeforeunload = null;
@@ -450,68 +447,33 @@ var SurveysForUserObject = function () {
     };
 };
 
-var SurveysObject = function () {
+var Object = function () {
     var self = this;
     
-    self.IdSurvey = ko.observable();
+    self. = ko.observable();
     self.IsMaster = ko.observable(false);
-    self.IdSurveyType = ko.observable();
+    self. = ko.observable();
     self.Title = ko.observable();
-    self.Description = ko.observable();
-    self.DateFrom = ko.observable();
-    self.DateUntil = ko.observable();
-    self.IsAnonymous = ko.observable();
-    self.IsTest = ko.observable();
-    self.IsPublic = ko.observable();
-    self.IsActive = ko.observable();
-    self.SurveyEndedByOption = ko.observable(0);
-    self.QuestionList = ko.observableArray();
-    self.Username = ko.observable();
-	self.EndSurveyDescription =  ko.observable();
-	self.SurveyTreshold =  ko.observable();
+
+	self. =  ko.observable();
+	self. =  ko.observable();
 	self.TextTreshold =  ko.observable();
 	self.Disclaimer =  ko.observable();
 
 //    self.query = ko.observable('');
-    
-    self.ReplaceDescriptionPlaceholders=function(){
-    	var descStr=" ";
-    	descStr=self.Description();
-    	if(descStr){    		
-    		descStr=descStr.split("{ManagerName}").join(homeModelObject.ManagerName());
-    			//descStr.replace("{ManagerName}",homeModelObject.ManagerName());
-    	}    	
-    	return descStr;
-    };
-    
-    self.ReplaceDisclaimer=function(){
-    	var discStr=" ";
-    	discStr=self.Disclaimer();
-    	console.log(discStr)
-    	if(discStr){    		
-	    	if(discStr.localeCompare('The participation in this survey is voluntary and anonymous, please read the  <a href="https://jam4.sapjam.com/groups/jXPyfZtSiQEcvwnWp8bpSD/documents/BzCBvJP0z8cfIZlv2tCNxc/slide_viewer" target="_blank">Privacy Statement</a>  for further information. The agreed Threshold for numeric values is {Threshold for Reporting} and for text answers it is {Text Threshold}.') == 0 && getCookie('lang') == 'de'){
-	    		discStr = 'Die Teilnahme an dieser Umfrage ist freiwillig und anonym. Bitte lies das '+' <a href="https://jam4.sapjam.com/groups/jXPyfZtSiQEcvwnWp8bpSD/documents/BzCBvJP0z8cfIZlv2tCNxc/slide_viewer" target="_blank">Privacy Statement</a> '+' für weitergehende Informationen. Die vereinbarte Mindestauswertungsgrenze für numerische Werte ist {Threshold for Reporting} und für Textantworten ist sie {Text Threshold}.';
-	    	} else {
-	    	    discStr=self.Disclaimer();
-	    	}
-    		discStr=discStr.split("{Threshold for Reporting}").join(self.SurveyTreshold());
-    		discStr=discStr.split("{Text Threshold}").join(self.TextTreshold());
-    			//descStr.replace("{ManagerName}",homeModelObject.ManagerName());
-    	}    	
-    	return discStr;
-    };
+
 
     
     
-    self.GetSurveyById=function(idparam,defferedParam,lang){
+    self.GeById=function(idparam,defferedParam,lang){
     	 var r = $.Deferred();
     	 var i;
 //     	var token = localStorage.getItem('t');
 //     	if(token){
  		var params={};
- 		var surveyQuestionObject;
+ 		var ;
  		var questionOptionObject;
- 		params.IdSurvey=idparam;
+ 		params.=idparam;
  		params.lang=getCookie("lang");
  		//params.lang='de';
  		console.log(params.lang);
@@ -521,7 +483,7 @@ var SurveysObject = function () {
  	        data: JSON.stringify(params),
  	        cache: false,
  	        crossDomain: true,
- 	        url: urlString + "services/GetSurvey.xsjs", 
+ 	        url: urlString + "services/.xsjs", 
 // 	        		+"?token="+encodeURIComponent(token),
  	        type: 'POST',
  	        error: function (x, s, m) { 
@@ -530,503 +492,10 @@ var SurveysObject = function () {
  	        success: function (res) {	
  	        	console.log(res);
  	        	self.QuestionList([]);
- 	        	self.IdSurvey(res.IdSurvey);
- 	        	self.IdSurveyType(res.IdSurveyType);
+ 	        	self.(res.);
+ 	        	self.(res.);
  	        	self.Title(res.Title);
  	        	self.Description(res.Description);
- 	        	self.DateFrom(res.DateFrom);
- 	        	self.DateUntil(res.DateUntil);
- 	        	self.IsAnonymous(res.IsAnonymous);
- 	        	self.IsTest(res.IsTest);
- 	        	self.IsPublic(res.IsPublic);
-				self.EndSurveyDescription(res.EndSurveyDescription);
-				self.Disclaimer(res.Disclaimer); 
-				self.SurveyTreshold(res.SurveyTreshold);
-	            self.TextTreshold(res.TextTreshold);
- 	        	//self.Username('P1940423439');
- 	        	surveyQuestionObject=new SurveyQuestionObject();
- 	        	questionOptionObject=new QuestionOptionObject();
- 	        	var x=0,y=0;
- 	        	for(x=0;x<res.Questions.length;x++){	        		
- 	        		surveyQuestionObject=new SurveyQuestionObject();
- 	        		surveyQuestionObject.AllowCantSayValue(false);
- 	        		surveyQuestionObject.QuestionNo(res.Questions[x].QuestionNo);
- 	        		surveyQuestionObject.PreviousQuestionNo(x);
- 	        		
- 	        		if(x==(res.Questions.length-1)){
- 	        			surveyQuestionObject.NextQuestionNo(res.Questions[x].QuestionNo);
- 	        		}else{
- 	        			surveyQuestionObject.NextQuestionNo(res.Questions[x+1].QuestionNo);
- 	        		}
- 	        		surveyQuestionObject.SkipToPageValue(res.Questions[x].SkipToPageNumber);
- 	        		surveyQuestionObject.SkipToPageId(res.Questions[x].SkipToIdPage);
- 	        		surveyQuestionObject.IdSurveyQuestions(res.Questions[x].IdSurveyQuestions);
- 	        		surveyQuestionObject.IdSurvey(res.Questions[x].IdSurvey);
- 	        		surveyQuestionObject.IdQuestionType(res.Questions[x].IdQuestionType);
- 	        		surveyQuestionObject.Title(res.Questions[x].Title);
- 	        		surveyQuestionObject.Description(res.Questions[x].Description);
- 	        		surveyQuestionObject.NumberOfOptions(res.Questions[x].NumberOfOptions);
- 	        		surveyQuestionObject.ValueSameAsDescription(res.Questions[x].ValueSameAsDescription);
- 	        		surveyQuestionObject.RateFrom(res.Questions[x].RateFrom);
- 	        		surveyQuestionObject.RateTo(res.Questions[x].RateTo);
- 	        		surveyQuestionObject.RateStep(res.Questions[x].RateStep);
- 	        		surveyQuestionObject.AllowCantSay(res.Questions[x].AllowCantSay);	  
- 	        		surveyQuestionObject.IsPage(res.Questions[x].IsPage);
- 	        		surveyQuestionObject.IsMultiChoice(res.Questions[x].IsMultiChoice);
- 	        		surveyQuestionObject.HowManyDropdowns(res.Questions[x].HowManyDropdowns);
- 	        		surveyQuestionObject.DropdownsOptions(res.Questions[x].DropdownsOptions);
- 	        		surveyQuestionObject.DateFrom(res.Questions[x].DateFrom);
- 	        		surveyQuestionObject.DateTo(res.Questions[x].DateTo);
- 	        		surveyQuestionObject.TextareaSmall(res.Questions[x].TextareaSmall);
- 	        		for(y=0;y<res.Questions[x].QuestionOptions.length;y++){
- 	        			questionOptionObject = new QuestionOptionObject();
- 	        			questionOptionObject.Description(res.Questions[x].QuestionOptions[y].Description);
- 		        		questionOptionObject.IdSurveyOptions(res.Questions[x].QuestionOptions[y].IdSurveyOptions);
- 		        		questionOptionObject.IdSurveyQuestions(res.Questions[x].QuestionOptions[y].IdSurveyQuestions);
- 		        		questionOptionObject.OptionEndSurvey(res.Questions[x].QuestionOptions[y].OptionEndSurvey);
- 		        		questionOptionObject.SkipToIdPage(res.Questions[x].QuestionOptions[y].SkipToIdPage);
- 		        		questionOptionObject.SkipToPageNumber(res.Questions[x].QuestionOptions[y].SkipToPageNumber);
- 		        		questionOptionObject.Value(res.Questions[x].QuestionOptions[y].Value);
- 		        		questionOptionObject.ImageUrl(res.Questions[x].QuestionOptions[y].ImageUrl);
- 		        		questionOptionObject.TextDescription(res.Questions[x].QuestionOptions[y].TextDescription);
- 		        		
- 		        		surveyQuestionObject.QuestionOptions().push(questionOptionObject);
- 	        		}	
- 	        		if(surveyQuestionObject.IdQuestionType()==8) //matrix
-        			{	for(y=0;y<res.Questions[x].QuestionRatings.length;y++){
-	 	        			questionOptionObject = new QuestionOptionObject();
-	 	        			questionOptionObject.Description(res.Questions[x].QuestionRatings[y].Description);
-	 		        		questionOptionObject.IdSurveyRatings(res.Questions[x].QuestionRatings[y].IdSurveyRatings);
-	 		        		questionOptionObject.IdSurveyQuestions(res.Questions[x].QuestionRatings[y].IdSurveyQuestions);
-	 		        		questionOptionObject.OptionEndSurvey(res.Questions[x].QuestionRatings[y].OptionEndSurvey);
-	 		        		questionOptionObject.SkipToIdPage(res.Questions[x].QuestionRatings[y].SkipToIdPage);
-	 		        		questionOptionObject.SkipToPageNumber(res.Questions[x].QuestionRatings[y].SkipToPageNumber);
-	 		        		questionOptionObject.Value(res.Questions[x].QuestionRatings[y].Value);
-	 		        		questionOptionObject.ImageUrl(res.Questions[x].QuestionRatings[y].ImageUrl);
-	 		        		questionOptionObject.TextDescription(res.Questions[x].QuestionRatings[y].TextDescription);
-	 		        		
-	 		        		surveyQuestionObject.QuestionRatings().push(questionOptionObject);
- 	        			}
- 	        			
-        			
-        			}
- 	        		if(surveyQuestionObject.IsPage()=="1"){
- 	        			for(z=0;z<res.Questions[x].PageQuestions.length;z++){
- 	        				surveyQuestionObject1=new SurveyQuestionObject()
- 	    	        		surveyQuestionObject1.AllowCantSayValue(false);
- 	    	        		surveyQuestionObject1.QuestionNo(res.Questions[x].PageQuestions[z].QuestionNo);
- 	    	        		surveyQuestionObject1.IdSurveyQuestions(res.Questions[x].PageQuestions[z].IdSurveyQuestions);
- 	    	        		surveyQuestionObject1.IdSurvey(res.Questions[x].PageQuestions[z].IdSurvey);
- 	    	        		surveyQuestionObject1.IdQuestionType(res.Questions[x].PageQuestions[z].IdQuestionType);
- 	    	        		surveyQuestionObject1.Title(res.Questions[x].PageQuestions[z].Title);
- 	    	        		surveyQuestionObject1.Description(res.Questions[x].PageQuestions[z].Description);
- 	    	        		surveyQuestionObject1.NumberOfOptions(res.Questions[x].PageQuestions[z].NumberOfOptions);
- 	    	        		surveyQuestionObject1.ValueSameAsDescription(res.Questions[x].PageQuestions[z].ValueSameAsDescription);
- 	    	        		surveyQuestionObject1.RateFrom(res.Questions[x].PageQuestions[z].RateFrom);
- 	    	        		surveyQuestionObject1.RateTo(res.Questions[x].PageQuestions[z].RateTo);
- 	    	        		surveyQuestionObject1.RateStep(res.Questions[x].PageQuestions[z].RateStep);
- 	    	        		surveyQuestionObject1.AllowCantSay(res.Questions[x].PageQuestions[z].AllowCantSay);	 
- 	    	        		surveyQuestionObject1.SkipToPageValue(res.Questions[x].PageQuestions[z].SkipToPageNumber);
- 	    	        		surveyQuestionObject1.SkipToPageId(res.Questions[x].PageQuestions[z].SkipToIdPage);
- 	    	        		surveyQuestionObject1.IsMultiChoice(res.Questions[x].PageQuestions[z].IsMultiChoice);
-// 	    	        		debugger;
- 	    	        		surveyQuestionObject1.HowManyDropdowns(res.Questions[x].PageQuestions[z].HowManyDropdowns);
- 	    	        		surveyQuestionObject1.DropdownsOptions(res.Questions[x].PageQuestions[z].DropdownsOptions);
- 	    	        		surveyQuestionObject1.DateFrom(currentQuestionObject.formatDateTimeObj(res.Questions[x].PageQuestions[z].DateFrom));
- 	    	        		surveyQuestionObject1.DateTo(currentQuestionObject.formatDateTimeObj(res.Questions[x].PageQuestions[z].DateTo));
- 	    	        		surveyQuestionObject1.TextareaSmall(res.Questions[x].PageQuestions[z].TextareaSmall);
- 	    	        		for(v=0;v<res.Questions[x].PageQuestions[z].QuestionOptions.length;v++){
- 	    	        			questionOptionObject1 = new QuestionOptionObject();
- 	    	        			questionOptionObject1.Description(res.Questions[x].PageQuestions[z].QuestionOptions[v].Description);
- 	    		        		questionOptionObject1.IdSurveyOptions(res.Questions[x].PageQuestions[z].QuestionOptions[v].IdSurveyOptions);
- 	    		        		questionOptionObject1.IdSurveyQuestions(res.Questions[x].PageQuestions[z].QuestionOptions[v].IdSurveyQuestions);
- 	    		        		questionOptionObject1.OptionEndSurvey(res.Questions[x].PageQuestions[z].QuestionOptions[v].OptionEndSurvey);
- 	    		        		questionOptionObject1.SkipToIdPage(res.Questions[x].PageQuestions[z].QuestionOptions[v].SkipToIdPage);
- 	    		        		questionOptionObject1.SkipToPageNumber(res.Questions[x].PageQuestions[z].QuestionOptions[v].SkipToPageNumber);
- 	    		        		if(questionOptionObject1.SkipToPageNumber()!=0 && questionOptionObject1.SkipToPageNumber()!=undefined){
- 	    		        			surveyQuestionObject1.IsSkippingQuestion(true);
- 	    		        		}
- 	    		        		questionOptionObject1.Value(res.Questions[x].PageQuestions[z].QuestionOptions[v].Value);
- 	    		        		questionOptionObject1.ImageUrl(res.Questions[x].PageQuestions[z].QuestionOptions[v].ImageUrl);
- 	    		        		questionOptionObject1.TextDescription(res.Questions[x].PageQuestions[z].QuestionOptions[v].TextDescription);
- 	    		        		
- 	    		        		surveyQuestionObject1.QuestionOptions().push(questionOptionObject1);
- 	    	        		}
- 	    	        		
-	 	    	        	if(surveyQuestionObject1.IdQuestionType()==8) //matrix
-	 	           			{	for(v=0;v<res.Questions[x].PageQuestions[z].QuestionRatings.length;v++){
-	 	    	        			questionOptionObject1 = new QuestionOptionObject();
-	 	    	        			questionOptionObject1.Description(res.Questions[x].PageQuestions[z].QuestionRatings[v].Description);
-	 	    		        		questionOptionObject1.IdSurveyRatings(res.Questions[x].PageQuestions[z].QuestionRatings[v].IdSurveyRatings);
-	 	    		        		questionOptionObject1.IdSurveyQuestions(res.Questions[x].PageQuestions[z].QuestionRatings[v].IdSurveyQuestions);
-	 	    		        		questionOptionObject1.OptionEndSurvey(res.Questions[x].PageQuestions[z].QuestionRatings[v].OptionEndSurvey);
-	 	    		        		questionOptionObject1.SkipToIdPage(res.Questions[x].PageQuestions[z].QuestionRatings[v].SkipToIdPage);
-	 	    		        		questionOptionObject1.SkipToPageNumber(res.Questions[x].PageQuestions[z].QuestionRatings[v].SkipToPageNumber);
-	 	    		        		if(questionOptionObject1.SkipToPageNumber()!=0 && questionOptionObject1.SkipToPageNumber()!=undefined){
-	 	    		        			surveyQuestionObject1.IsSkippingQuestion(true);
-	 	    		        		}
-	 	    		        		questionOptionObject1.Value(res.Questions[x].PageQuestions[z].QuestionRatings[v].Value);
-	 	    		        		questionOptionObject1.ImageUrl(res.Questions[x].PageQuestions[z].QuestionRatings[v].ImageUrl);
-	 	    		        		questionOptionObject1.TextDescription(res.Questions[x].PageQuestions[z].QuestionRatings[v].TextDescription);
-	 	    		        		
-	 	    		        		surveyQuestionObject1.QuestionRatings().push(questionOptionObject1);
-	 	           				}
-	 	    	        			
-	 	           			
-	 	           			}
- 	    	        		
- 	    	        		surveyQuestionObject.PageQuestions().push(surveyQuestionObject1);	
- 	        			}
- 	        			
- 	        		}
- 	        		self.QuestionList().push(surveyQuestionObject);
- 	        	}
- 	        	console.log("Survey load done");
- 	        	
- 	        	var params = {};
- 	 	       	params.Username = homeModelObject.Username();
- 	 	       	params.IdSurvey = idparam;
- 	 	       	params.ActionFlag = 2;
- 	 	       	
- 	 	       	$.ajax({
- 	 	   	        dataType: "json",
- 	 	   	        data: JSON.stringify(params),
- 	 	   	        cache: false,
- 	 	   	        crossDomain: true,
- 	 	   	        contentType: "application/json; charset=utf-8",
- 	 	   	        url: urlString + "services/GetSurveyTempAnswers.xsjs",
- 	 	   	        type: 'POST',
- 	 	   	        error: function (x, s, m) {
- 	 	   	            
- 	 	   	        },
- 	 	   	        success: function (res) {
- 	 	   	        	console.log("ima");
-// 	 	   	        	debugger;
-// 	 	   	        	console.log("QuestionList: "+ self.QuestionList()[0]);
- 	 	   	        	if(res[0]){
- 	 	   	        	var QuestionNum;
-	 	 	   	       for(var i = 0; i < self.QuestionList().length; i++){
-	 	 	   	    	   for(var j = 0; j < res.length; j++){
-		 	 	   	    	   if(self.QuestionList()[i].IsPage() == 1) { // multi questions page
-		 	 	   	    		   for(var k = 0; k < self.QuestionList()[i].PageQuestions().length; k++){
-			 	 	   	    			if(self.QuestionList()[i].PageQuestions()[k].IdSurveyQuestions() == res[j].IdSurveyQuestions) {
-			 	 	   	    				if((self.QuestionList()[i].PageQuestions()[k].IsMultiChoice()==1)||(self.QuestionList()[i].PageQuestions()[k].IsMultiChoice()==3)){
-			 	 	   	    					if(self.QuestionList()[i].PageQuestions()[k].IdQuestionType()=="7"){
-			 	 	   	    						self.QuestionList()[i].PageQuestions()[k].NumericAnswerForMulti.push(res[j].TextAnswer);
-			 	 	   	    						self.QuestionList()[i].PageQuestions()[k].NumericAnswer(undefined);
-			 	 	   	    					} else {
-				 	 	   	    					self.QuestionList()[i].PageQuestions()[k].NumericAnswerForMulti.push(res[j].NumericAnswer);
-				 	 	   	    					self.QuestionList()[i].PageQuestions()[k].NumericAnswer(undefined);
-			 	 	   	    					}
-			 	 	   	    				}	
-			 	 	   	    				if(self.QuestionList()[i].PageQuestions()[k].IdQuestionType()=="8"){ //matrix
-				 	 	   	    				for(var o=0;o<self.QuestionList()[i].PageQuestions()[k].QuestionOptions().length;o++){
-			 	 	   	    						if(self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[o].Description()==res[j].TextAnswer){
-			 	 	   	    							if(self.QuestionList()[i].PageQuestions()[k].MatrixAnswers()[o]){
-				 	 	   	    							self.QuestionList()[i].PageQuestions()[k].MatrixAnswers()[o].NumericAnswer.push(String(res[j].NumericAnswer));
-				 	 	   	    							self.QuestionList()[i].PageQuestions()[k].MatrixAnswers()[o].CheckboxId.push(o+'_idQ'+self.QuestionList()[i].PageQuestions()[k].IdSurveyQuestions()+'_'+self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[o].IdSurveyOptions()+'_'+res[j].NumericAnswer);
-
-			 	 	   	    								
-			 	 	   	    							}else
-		 	 	   	    								{
-				 	 	   	    							var obj={};
-			 	 	   	    								obj.TextAnswer=res[j].TextAnswer;
-			 	 	   	    								obj.NumericAnswer=[String(res[j].NumericAnswer)];
-			 	 	   	    								obj.CheckboxId=[o+'_idQ'+self.QuestionList()[i].PageQuestions()[k].IdSurveyQuestions()+'_'+self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[o].IdSurveyOptions()+'_'+res[j].NumericAnswer];
-			 	 	   	    								obj.RadioId=o+'_idQ'+self.QuestionList()[i].PageQuestions()[k].IdSurveyQuestions()+'_'+self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[o].IdSurveyOptions()+'_'+res[j].NumericAnswer;
-
-			 	 	   	    								self.QuestionList()[i].PageQuestions()[k].MatrixAnswers()[o]=obj;
-		 	 	   	    								}
-			 	 	   	    							
-			 	 	   	    						}
-			 	 	   	    						
-			 	 	   	    						
-			 	 	   	    					}
-			 	 	   	    						
-			 	 	   	    				
-			 	 	   	    				}
-			 	 	   	    				
-				 	 	   	    			console.log("page match");
-				 	 	   	    		self.QuestionList()[i].PageQuestions()[k].NumericAnswer(res[j].NumericAnswer);
-				 	 	   	    		self.QuestionList()[i].PageQuestions()[k].TextAnswer(res[j].TextAnswer);
-				 	 	   	    		self.QuestionList()[i].PageQuestions()[k].AllowCantSayValue(res[j].AllowCantSayValue === "true" ? true : false);
-				 	 	   	    		
-				 	 	   	    	if(self.QuestionList()[i].PageQuestions()[k].IdQuestionType()=="6"&&self.QuestionList()[i].PageQuestions()[k].SkipToPageValue()!=0)//simple TEXT
-			 	 	   	    		{
-				 	 	   	    	
-				 	 	   	    					self.QuestionList()[i].PageQuestions()[k].IsSkippingQuestion(true);
-				 	 	   	    					self.QuestionList()[i].SkipToPageValue(self.QuestionList()[i].PageQuestions()[k].SkipToPageValue());
-				 	 	   	    					self.QuestionList()[i].SkipToPageId(self.QuestionList()[i].PageQuestions()[k].SkipToPageId());
-				 	 	   	    				
-				 	 	   	    					self.QuestionList()[i].NextQuestionNo(self.QuestionList()[i].PageQuestions()[k].SkipToPageValue());
-				 	 	   	    					self.QuestionList()[self.QuestionList()[i].NextQuestionNo()-1].PreviousQuestionNo(self.QuestionList()[i].QuestionNo());
-				 	 	   	    		
-			 	 	   	    		}
-				 	 	   	    		
-				 	 	   	    		
-				 	 	   	    		if(self.QuestionList()[i].PageQuestions()[k].IdQuestionType()=="5" ||self.QuestionList()[i].PageQuestions()[k].IdQuestionType()=="4"  )//simple option or simple rating
-				 	 	   	    		{
-				 	 	   	    			for(var m=0;m<self.QuestionList()[i].PageQuestions()[k].QuestionOptions().length;m++){
-				 	 	   	    				if(self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[m].Value()==res[j].NumericAnswer&&self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[m].SkipToPageNumber()!=0&&self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[m].SkipToPageNumber()!=undefined){
-				 	 	   	    					self.QuestionList()[i].PageQuestions()[k].IsSkippingQuestion(true);
-				 	 	   	    					self.QuestionList()[i].SkipToPageValue(self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[m].SkipToPageNumber());
-				 	 	   	    					self.QuestionList()[i].SkipToPageId(self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[m].SkipToIdPage());
-				 	 	   	    				
-				 	 	   	    					self.QuestionList()[i].NextQuestionNo(self.QuestionList()[i].PageQuestions()[k].QuestionOptions()[m].SkipToPageNumber());
-				 	 	   	    					self.QuestionList()[self.QuestionList()[i].NextQuestionNo()-1].PreviousQuestionNo(self.QuestionList()[i].QuestionNo());
-				 	 	   	    				
-				 	 	   	    				}
-				 	 	   	    			}
-				 	 	   	    		}
-				 	 	   	    	 }
-		 	 	   	    		   }
-		 	 	   	    	   }else{// single question page
-		 	 	   	    		   
-		 	 	   	    	   console.log("QuestionList: "+ self.QuestionList()[i].IdSurveyQuestions());
-			 	 	   	    		if(self.QuestionList()[i].IdSurveyQuestions() == res[j].IdSurveyQuestions) {
-			 	 	   	    			
-		 	 	   	    				if(self.QuestionList()[i].IdQuestionType()!="8" &&((self.QuestionList()[i].IsMultiChoice()==1)||(self.QuestionList()[i].IsMultiChoice()==3))){
-		 	 	   	    					if(self.QuestionList()[i].IdQuestionType()=="7"){
-		 	 	   	    						self.QuestionList()[i].NumericAnswerForMulti.push(res[j].TextAnswer);
-		 	 	   	    						self.QuestionList()[i].NumericAnswer(undefined);
-		 	 	   	    					} else {
-		 	 	   	    						self.QuestionList()[i].NumericAnswerForMulti.push(res[j].NumericAnswer);
-		 	 	   	    						self.QuestionList()[i].NumericAnswer(undefined);
-		 	 	   	    					}
-		 	 	   	    				}
-			 	 	   	    			console.log("match");
-			 	 	   	    		self.QuestionList()[i].NumericAnswer(res[j].NumericAnswer);
-			 	 	   	    		//self.QuestionList()[i].NumericAnswerForMulti(res[j].NumericAnswerForMulti);
-			 	 	   	    		self.QuestionList()[i].TextAnswer(res[j].TextAnswer);
-			 	 	   	    		self.QuestionList()[i].AllowCantSayValue(res[j].AllowCantSayValue === "true" ? true : false);
-			 	 	   	    		
-				 	 	  			if(self.QuestionList()[i].IdQuestionType()=="8"){ //matrix
-	 	 	   	    					
-	 	 	   	    					for(var o=0;o<self.QuestionList()[i].QuestionOptions().length;o++){
-	 	 	   	    						if(self.QuestionList()[i].QuestionOptions()[o].Description()==res[j].TextAnswer){
-	 	 	   	    							if(self.QuestionList()[i].MatrixAnswers()[o]){
-		 	 	   	    							self.QuestionList()[i].MatrixAnswers()[o].NumericAnswer.push(String(res[j].NumericAnswer));
-		 	 	   	    							self.QuestionList()[i].MatrixAnswers()[o].CheckboxId.push(o+'_'+self.QuestionList()[i].QuestionOptions()[o].IdSurveyOptions()+'_'+res[j].NumericAnswer);
-	 	 	   	    								
-	 	 	   	    							}else
- 	 	   	    								{
-		 	 	   	    							var obj={};
-	 	 	   	    								obj.TextAnswer=res[j].TextAnswer;
-	 	 	   	    								obj.NumericAnswer=[String(res[j].NumericAnswer)];
-	 	 	   	    								obj.CheckboxId=[o+'_'+self.QuestionList()[i].QuestionOptions()[o].IdSurveyOptions()+'_'+res[j].NumericAnswer];
-	 	 	   	    								obj.RadioId=o+'_'+self.QuestionList()[i].QuestionOptions()[o].IdSurveyOptions()+'_'+res[j].NumericAnswer;
-
-	 	 	   	    								self.QuestionList()[i].MatrixAnswers()[o]=obj;
- 	 	   	    								}
-	 	 	   	    							
-	 	 	   	    						}
-	 	 	   	    						
-	 	 	   	    						
-	 	 	   	    					}
-	 	 	   	    						
-	 	 	   	    					
-	 	 	   	    				}
-			 	 	   	    		
-			 	 	   	    		
-			 	 	   	   	if((self.QuestionList()[i].IdQuestionType()=="1"||self.QuestionList()[i].IdQuestionType()=="6")&&self.QuestionList()[i].SkipToPageValue()!=0)//simple TEXT
-	 	 	   	    		{
-		 	 	   	    		
-//		 	 	   	    	surveysObject.QuestionList()[2].PageQuestions()[1].SkipToPageValue()
-		 	 	   	    	
-		 	 	   	    					self.QuestionList()[i].IsSkippingQuestion(true);
-		 	 	   	    					self.QuestionList()[i].SkipToPageValue(self.QuestionList()[i].SkipToPageValue());
-		 	 	   	    					self.QuestionList()[i].SkipToPageId(self.QuestionList()[i].SkipToPageId());
-		 	 	   	    				
-		 	 	   	    					self.QuestionList()[i].NextQuestionNo(self.QuestionList()[i].SkipToPageValue());
-		 	 	   	    					self.QuestionList()[self.QuestionList()[i].NextQuestionNo()-1].PreviousQuestionNo(self.QuestionList()[i].QuestionNo());
-		 	 	   	    		
-	 	 	   	    		}
-			 	 	   	    		
-					 	 	   	   	if(self.QuestionList()[i].IdQuestionType()=="5"||self.QuestionList()[i].IdQuestionType()=="3"|| self.QuestionList()[i].IdQuestionType()=="2"||self.QuestionList()[i].IdQuestionType()=="4")//simple option or option or simple rating or rating 
-			 	 	   	    		{
-			 	 	   	    			for(var n=0;n<self.QuestionList()[i].QuestionOptions().length;n++){
-			 	 	   	    				if(self.QuestionList()[i].QuestionOptions()[n].Value()==res[j].NumericAnswer&&self.QuestionList()[i].QuestionOptions()[n].SkipToPageNumber()!=0&&self.QuestionList()[i].QuestionOptions()[n].SkipToPageNumber()!=undefined){
-			 	 	   	    					self.QuestionList()[i].IsSkippingQuestion(true);
-			 	 	   	    					self.QuestionList()[i].SkipToPageValue(self.QuestionList()[i].QuestionOptions()[n].SkipToPageNumber());
-			 	 	   	    					self.QuestionList()[i].SkipToPageId(self.QuestionList()[i].QuestionOptions()[n].SkipToIdPage());
-			 	 	   	    				
-			 	 	   	    					self.QuestionList()[i].NextQuestionNo(self.QuestionList()[i].QuestionOptions()[n].SkipToPageNumber());
-			 	 	   	    					self.QuestionList()[self.QuestionList()[i].NextQuestionNo()-1].PreviousQuestionNo(self.QuestionList()[i].QuestionNo());
-			 	 	   	    				}
-			 	 	   	    			}
-			 	 	   	    		}
-			 	 	   	    		
-			 	 	   	    		
-			 	 	   	    	}
-	 	 	   	    	   }
-			 	 	   	    
-	 	 	   	    	   }
-	 	 	   	       }
-	 	 	   	       
-	 	 	   	    	
-	 	 	   	    	
-	 	 	   	   		currentQuestionObject.QuestionNo(res[j-1].QuestionNo);
-			    		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			    		fillCurrentQuestionValues(question);
- 	 	   	        	}
- 	 	   	        }
- 	 	   	    });
- 	 	       	
- 	        	r.resolve(defferedParam);	        	
- 	        }
- 	    });
-//     	}
- 		return r;
-	};
-	
-
-		
-	self.GetSurveyFromObject=function(res){   	 	
-	        	self.QuestionList([]);
-	        	console.log(res);
-	        	self.IdSurvey(res.IdSurvey);
-	        	self.IdSurveyType(res.IdSurveyType);
-	        	self.Title(res.Title);
-	        	self.Description(res.Description);
-	        	self.DateFrom(res.DateFrom);
-	        	self.DateUntil(res.DateUntil);
-	        	self.IsAnonymous(res.IsAnonymous);
-	        	self.IsTest(res.IsTest);
-	        	self.IsPublic(res.IsPublic);
-	        	//self.Username('P1940423439');
-	        	surveyQuestionObject=new SurveyQuestionObject();
-	        	questionOptionObject=new QuestionOptionObject();
-	        	var x=0,y=0;
-	        	for(x=0;x<res.QuestionList.length;x++){	        		
-	        		surveyQuestionObject=new SurveyQuestionObject();
-	        		surveyQuestionObject.AllowCantSayValue(false);
-	        		surveyQuestionObject.QuestionNo(res.QuestionList[x].QuestionNo);
-	        		if(x==0){
- 	        			surveyQuestionObject.PreviousQuestionNo(res.QuestionList[x].QuestionNo);
- 	        		}else{
- 	        			surveyQuestionObject.PreviousQuestionNo(res.QuestionList[x-1].QuestionNo);
- 	        		}
- 	        		
- 	        		if(x==(res.Questions.length-1)){
- 	        			surveyQuestionObject.NextQuestionNo(res.QuestionList[x].QuestionNo);
- 	        		}else{
- 	        			surveyQuestionObject.NextQuestionNo(res.QuestionList[x+1].QuestionNo);
- 	        		}
- 	        		surveyQuestionObject.SkipToPageValue(0);
- 	        		surveyQuestionObject.SkipToPageId(0);
-	        		surveyQuestionObject.IdSurveyQuestions(res.QuestionList[x].IdSurveyQuestions);
-	        		surveyQuestionObject.IdSurvey(res.QuestionList[x].IdSurvey);
-	        		surveyQuestionObject.IdQuestionType(res.QuestionList[x].IdQuestionType);
-	        		surveyQuestionObject.Title(res.QuestionList[x].Title);
-	        		surveyQuestionObject.Description(res.QuestionList[x].Description);
-	        		surveyQuestionObject.NumberOfOptions(res.QuestionList[x].NumberOfOptions);
-	        		surveyQuestionObject.ValueSameAsDescription(res.QuestionList[x].ValueSameAsDescription);
-	        		surveyQuestionObject.RateFrom(res.QuestionList[x].RateFrom);
-	        		surveyQuestionObject.RateTo(res.QuestionList[x].RateTo);
-	        		surveyQuestionObject.RateStep(res.QuestionList[x].RateStep);
-	        		surveyQuestionObject.AllowCantSay(res.QuestionList[x].AllowCantSay);	  
-	        		surveyQuestionObject.IsPage(res.QuestionList[x].IsPage);
-	        		surveyQuestionObject.TextAnswer(res.QuestionList[x].TextAnswer);
-	        		surveyQuestionObject.NumericAnswer(res.QuestionList[x].NumericAnswer);
-	        		surveyQuestionObject.DateFrom(res.QuestionList[x].DateFrom);
-	        		surveyQuestionObject.DateTo(res.QuestionList[x].DateTo);
-	        		for(y=0;y<res.QuestionList[x].QuestionOptions.length;y++){
-	        			questionOptionObject = new QuestionOptionObject();
-	        			questionOptionObject.Description(res.QuestionList[x].QuestionOptions[y].Description);
-		        		questionOptionObject.IdSurveyOptions(res.QuestionList[x].QuestionOptions[y].IdSurveyOptions);
-		        		questionOptionObject.IdSurveyQuestions(res.QuestionList[x].QuestionOptions[y].IdSurveyQuestions);
-		        		questionOptionObject.OptionEndSurvey(res.QuestionList[x].QuestionOptions[y].OptionEndSurvey);
-		        		questionOptionObject.SkipToIdPage(res.Questions[x].QuestionOptions[y].SkipToIdPage);
-		        		questionOptionObject.SkipToPageNumber(res.Questions[x].QuestionOptions[y].SkipToPageNumber);
-		        		questionOptionObject.Value(res.QuestionList[x].QuestionOptions[y].Value);
-		        		questionOptionObject.ImageUrl(res.QuestionList[x].QuestionOptions[y].ImageUrl);
-		        		questionOptionObject.TextDescription(res.QuestionList[x].QuestionOptions[y].TextDescription);
-		        		
-		        		surveyQuestionObject.QuestionOptions().push(questionOptionObject);
-	        		}	
-	        		
-	        		for(y=0;y<res.QuestionList[x].QuestionRatings.length;y++){
-	        			questionOptionObject = new QuestionOptionObject();
-	        			questionOptionObject.Description(res.QuestionList[x].QuestionRatings[y].Description);
-		        		questionOptionObject.IdSurveyRatings(res.QuestionList[x].QuestionRatings[y].IdSurveyRatings);
-		        		questionOptionObject.IdSurveyQuestions(res.QuestionList[x].QuestionRatings[y].IdSurveyQuestions);
-		        		questionOptionObject.OptionEndSurvey(res.QuestionList[x].QuestionRatings[y].OptionEndSurvey);
-		        		questionOptionObject.SkipToIdPage(res.Questions[x].QuestionRatings[y].SkipToIdPage);
-		        		questionOptionObject.SkipToPageNumber(res.Questions[x].QuestionRatings[y].SkipToPageNumber);
-		        		questionOptionObject.Value(res.QuestionList[x].QuestionRatings[y].Value);
-		        		questionOptionObject.ImageUrl(res.QuestionList[x].QuestionRatings[y].ImageUrl);
-		        		questionOptionObject.TextDescription(res.QuestionList[x].QuestionRatings[y].TextDescription);
-		        		
-		        		surveyQuestionObject.QuestionRatings().push(questionOptionObject);
-	        		}	
-	        		
-	        		if(surveyQuestionObject.IsPage()=="1"){
-	        			for(z=0;z<res.QuestionList[x].PageQuestions.length;z++){
-	        				surveyQuestionObject1=new SurveyQuestionObject()
-	    	        		surveyQuestionObject1.AllowCantSayValue(false);
-	    	        		surveyQuestionObject1.QuestionNo(res.QuestionList[x].PageQuestions[z].QuestionNo);
-	    	        		surveyQuestionObject1.IdSurveyQuestions(res.QuestionList[x].PageQuestions[z].IdSurveyQuestions);
-	    	        		surveyQuestionObject1.IdSurvey(res.QuestionList[x].PageQuestions[z].IdSurvey);
-	    	        		surveyQuestionObject1.IdQuestionType(res.QuestionList[x].PageQuestions[z].IdQuestionType);
-	    	        		surveyQuestionObject1.Title(res.QuestionList[x].PageQuestions[z].Title);
-	    	        		surveyQuestionObject1.Description(res.QuestionList[x].PageQuestions[z].Description);
-	    	        		surveyQuestionObject1.NumberOfOptions(res.QuestionList[x].PageQuestions[z].NumberOfOptions);
-	    	        		surveyQuestionObject1.ValueSameAsDescription(res.QuestionList[x].PageQuestions[z].ValueSameAsDescription);
-	    	        		surveyQuestionObject1.RateFrom(res.QuestionList[x].PageQuestions[z].RateFrom);
-	    	        		surveyQuestionObject1.RateTo(res.QuestionList[x].PageQuestions[z].RateTo);
-	    	        		surveyQuestionObject1.RateStep(res.QuestionList[x].PageQuestions[z].RateStep);
-	    	        		surveyQuestionObject1.AllowCantSay(res.QuestionList[x].PageQuestions[z].AllowCantSay);
-	    	        		surveyQuestionObject1.TextAnswer(res.QuestionList[x].PageQuestions[z].TextAnswer);
-	    	        		surveyQuestionObject1.NumericAnswer(res.QuestionList[x].PageQuestions[z].NumericAnswer);
-	    	        		surveyQuestionObject1.DateFrom(res.QuestionList[x].PageQuestions[z].DateFrom);
-	    	        		surveyQuestionObject1.DateTo(res.QuestionList[x].PageQuestions[z].DateTo);
-//	    	        		debugger;
-	    	        		surveyQuestionObject1.NumericAnswerForMulti(res.QuestionList[x].PageQuestions[z].NumericAnswerForMulti);
-	    	        		surveyQuestionObject1.MatrixAnswers(res.QuestionList[x].PageQuestions[z].MatrixAnswers);
-
-	    	        		for(v=0;v<res.QuestionList[x].PageQuestions[z].QuestionOptions.length;v++){
-	    	        			questionOptionObject1 = new QuestionOptionObject();
-	    	        			questionOptionObject1.Description(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].Description);
-	    		        		questionOptionObject1.IdSurveyOptions(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].IdSurveyOptions);
-	    		        		questionOptionObject1.IdSurveyQuestions(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].IdSurveyQuestions);
-	    		        		questionOptionObject1.OptionEndSurvey(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].OptionEndSurvey);
-	    		        		questionOptionObject1.SkipToIdPage(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].SkipToIdPage);
-	    		        		questionOptionObject1.SkipToPageNumber(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].SkipToPageNumber);
-	    		        		if(questionOptionObject1.SkipToPageNumber()!=0 && questionOptionObject1.SkipToPageNumber()!=undefined){
- 	    		        			surveyQuestionObject1.IsSkippingQuestion(true);
- 	    		        		}
-	    		        		questionOptionObject1.Value(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].Value);
-	    		        		questionOptionObject1.ImageUrl(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].ImageUrl);
-	    		        		questionOptionObject1.TextDescription(res.QuestionList[x].PageQuestions[z].QuestionOptions[v].TextDescription);
-	    		        		
-	    		        		surveyQuestionObject1.QuestionOptions().push(questionOptionObject1);
-	    	        		}
-	    	        		
-	    	        		for(v=0;v<res.QuestionList[x].PageQuestions[z].QuestionRatings.length;v++){
-	    	        			questionOptionObject1 = new QuestionOptionObject();
-	    	        			questionOptionObject1.Description(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].Description);
-	    		        		questionOptionObject1.IdSurveyRatings(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].IdSurveyRatings);
-	    		        		questionOptionObject1.IdSurveyQuestions(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].IdSurveyQuestions);
-	    		        		questionOptionObject1.OptionEndSurvey(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].OptionEndSurvey);
-	    		        		questionOptionObject1.SkipToIdPage(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].SkipToIdPage);
-	    		        		questionOptionObject1.SkipToPageNumber(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].SkipToPageNumber);
-	    		        		if(questionOptionObject1.SkipToPageNumber()!=0 && questionOptionObject1.SkipToPageNumber()!=undefined){
- 	    		        			surveyQuestionObject1.IsSkippingQuestion(true);
- 	    		        		}
-	    		        		questionOptionObject1.Value(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].Value);
-	    		        		questionOptionObject1.ImageUrl(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].ImageUrl);
-	    		        		questionOptionObject1.TextDescription(res.QuestionList[x].PageQuestions[z].QuestionRatings[v].TextDescription);
-	    		        		
-	    		        		surveyQuestionObject1.QuestionRatings().push(questionOptionObject1);
-	    	        		}
-	    	        		surveyQuestionObject.PageQuestions().push(surveyQuestionObject1);	
-	        			}
-	        			
-	        		}
-	        		self.QuestionList().push(surveyQuestionObject);
-	        	}
-	        	console.log("Survey load done");   
-	};
 	self.getObjectKeyValue=function(obj,key) {
 		  
 		  return obj[key]();
@@ -1071,7 +540,7 @@ var SurveysObject = function () {
 
 	}
 	
-	self.saveSurveyTempAnswers = function(){
+	self.savmpAnswers = function(){
 		homeModelObject.checkIfSessionExpired().done(function(data){	
 			if(homeModelObject.IsLoggedIn()){
 				
@@ -1091,7 +560,7 @@ var SurveysObject = function () {
 				
 				if(currentQuestionObject.IsPage()==="1"){
 					for(var u = 0; u < currentQuestionObject.PageQuestions().length; u++){
-						CurrentObjectList.push(currentQuestionObject.PageQuestions()[u].IdSurveyQuestions());
+						CurrentObjectList.push(currentQuestionObject.PageQuestions()[u].uestions());
 					}
 				}
 			
@@ -1099,25 +568,25 @@ var SurveysObject = function () {
 					if(self.QuestionList()[i].IsPage() === "1"){
 						for(var j = 0; j < self.QuestionList()[i].PageQuestions().length; j++){
 							
-						 if((self.QuestionList()[i].PageQuestions()[j].TextAnswer() !== undefined || self.QuestionList()[i].PageQuestions()[j].NumericAnswer() !== undefined || surveysObject.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti().length > 0 || surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers().filter(String).length > 0) && CurrentObjectList.indexOf(self.QuestionList()[i].PageQuestions()[j].IdSurveyQuestions()) === -1){
-							if(surveysObject.QuestionList()[i].PageQuestions()[j].IdQuestionType()=='8'){
+						 if((self.QuestionList()[i].PageQuestions()[j].TextAnswer() !== undefined || self.QuestionList()[i].PageQuestions()[j].NumericAnswer() !== undefined || surveysObject.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti().length > 0 || surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers().filter(String).length > 0) && CurrentObjectList.indexOf(self.QuestionList()[i].PageQuestions()[j].()) === -1){
+							if(.QuestionList()[i].PageQuestions()[j].IdQuestionType()=='8'){
 								 
-								 for(var a=0; a<surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers().length; a++){
+								 for(var a=0; a<.QuestionList()[i].PageQuestions()[j].MatrixAnswers().length; a++){
 									 
-									 if(surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].NumericAnswer.length>0){
+									 if(.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].NumericAnswer.length>0){
 										 debugger;
 									 
 								 		
-										for(var m=0; m<surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].NumericAnswer.length; m++){
+										for(var m=0; m<.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].NumericAnswer.length; m++){
 											AnswersObj = {};
 										 	AnswersObj.Username=homeModelObject.Username();
-											AnswersObj.IdSurvey=self.QuestionList()[i].PageQuestions()[j].IdSurvey();
-											AnswersObj.IdSurveyQuestions=self.QuestionList()[i].PageQuestions()[j].IdSurveyQuestions();
+											AnswersObj.=self.QuestionList()[i].PageQuestions()[j].();
+											AnswersObj.IdSureyQuestions=self.QuestionList()[i].PageQuestions()[j].();
 											AnswersObj.StartTime = window.timeGlobal;
 											console.log("StartTime: "+AnswersObj.StartTime);
 											AnswersObj.AllowCantSayValue=self.QuestionList()[i].PageQuestions()[j].AllowCantSayValue().toString();
-											AnswersObj.NumericAnswer=surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].NumericAnswer[m];
-											AnswersObj.TextAnswer=surveysObject.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].TextAnswer;
+											AnswersObj.NumericAnswer=.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].NumericAnswer[m];
+											AnswersObj.TextAnswer=.QuestionList()[i].PageQuestions()[j].MatrixAnswers()[a].TextAnswer;
 											AnswersObj.QuestionNo=self.QuestionList()[i].QuestionNo();
 											AnswersObj.IsPage=self.QuestionList()[i].IsPage();
 											AnswersObj.ActionFlag = 1;
@@ -1132,20 +601,20 @@ var SurveysObject = function () {
 							 }
 							 
 							 
-							else if(((surveysObject.QuestionList()[i].PageQuestions()[j].IsMultiChoice()==1)||(surveysObject.QuestionList()[i].PageQuestions()[j].IsMultiChoice()==3) )&& surveysObject.QuestionList()[i].PageQuestions()[j].IsMultiChoice()!==undefined){
-								 for(var a=0; a<surveysObject.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti().length; a++){
+							else if(((.QuestionList()[i].PageQuestions()[j].IsMultiChoice()==1)||(.QuestionList()[i].PageQuestions()[j].IsMultiChoice()==3) )&& .QuestionList()[i].PageQuestions()[j].IsMultiChoice()!==undefined){
+								 for(var a=0; a<.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti().length; a++){
 							 		AnswersObj = {};
 								 	AnswersObj.Username=homeModelObject.Username();
-									AnswersObj.IdSurvey=self.QuestionList()[i].PageQuestions()[j].IdSurvey();
-									AnswersObj.IdSurveyQuestions=self.QuestionList()[i].PageQuestions()[j].IdSurveyQuestions();
+									AnswersObj.=self.QuestionList()[i].PageQuestions()[j].();
+									AnswersObj.=self.QuestionList()[i].PageQuestions()[j].();
 									AnswersObj.StartTime = window.timeGlobal;
 									console.log("StartTime: "+AnswersObj.StartTime);
 									AnswersObj.AllowCantSayValue=self.QuestionList()[i].PageQuestions()[j].AllowCantSayValue().toString();
 									if(self.QuestionList()[i].PageQuestions()[j].IdQuestionType()=="7"){
 										AnswersObj.NumericAnswer=self.QuestionList()[i].PageQuestions()[j].NumericAnswer();
-										AnswersObj.TextAnswer=surveysObject.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti()[a];
+										AnswersObj.TextAnswer=.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti()[a];
 									}else{
-										AnswersObj.NumericAnswer=surveysObject.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti()[a];//self.QuestionList()[i].PageQuestions()[j].NumericAnswer();
+										AnswersObj.NumericAnswer=.QuestionList()[i].PageQuestions()[j].NumericAnswerForMulti()[a];//self.QuestionList()[i].PageQuestions()[j].NumericAnswer();
 										AnswersObj.TextAnswer=self.QuestionList()[i].PageQuestions()[j].TextAnswer();
 									}
 									
@@ -1161,8 +630,8 @@ var SurveysObject = function () {
 							 else {
 								AnswersObj = {};
 								AnswersObj.Username=homeModelObject.Username();
-								AnswersObj.IdSurvey=self.QuestionList()[i].PageQuestions()[j].IdSurvey();
-								AnswersObj.IdSurveyQuestions=self.QuestionList()[i].PageQuestions()[j].IdSurveyQuestions();
+								AnswersObj.=self.QuestionList()[i].PageQuestions()[j].();
+								AnswersObj.=self.QuestionList()[i].PageQuestions()[j].();
 								AnswersObj.StartTime = window.timeGlobal;
 								console.log("StartTime: "+AnswersObj.StartTime);
 								AnswersObj.AllowCantSayValue=self.QuestionList()[i].PageQuestions()[j].AllowCantSayValue().toString();
@@ -1176,24 +645,24 @@ var SurveysObject = function () {
 							}
 						}
 					} else {
-						if(surveysObject.QuestionList()[i].IdQuestionType()=='8'){
+						if(.QuestionList()[i].IdQuestionType()=='8'){
 							 
-							 for(var a=0; a<surveysObject.QuestionList()[i].MatrixAnswers().length; a++){
+							 for(var a=0; a<.QuestionList()[i].MatrixAnswers().length; a++){
 								 
-								 if(surveysObject.QuestionList()[i].MatrixAnswers()[a].NumericAnswer.length>0){
+								 if(.QuestionList()[i].MatrixAnswers()[a].NumericAnswer.length>0){
 									 
 								 debugger;
 							 		
-									for(var m=0; m<surveysObject.QuestionList()[i].MatrixAnswers()[a].NumericAnswer.length; m++){
+									for(var m=0; m<.QuestionList()[i].MatrixAnswers()[a].NumericAnswer.length; m++){
 										AnswersObj = {};
 									 	AnswersObj.Username=homeModelObject.Username();
-										AnswersObj.IdSurvey=self.QuestionList()[i].IdSurvey();
-										AnswersObj.IdSurveyQuestions=self.QuestionList()[i].IdSurveyQuestions();
+										AnswersObj.=self.QuestionList()[i].();
+										AnswersObj.=self.QuestionList()[i].();
 										AnswersObj.StartTime = window.timeGlobal;
 										console.log("StartTime: "+AnswersObj.StartTime);
 										AnswersObj.AllowCantSayValue=self.QuestionList()[i].AllowCantSayValue().toString();
-										AnswersObj.NumericAnswer=surveysObject.QuestionList()[i].MatrixAnswers()[a].NumericAnswer[m];
-										AnswersObj.TextAnswer=surveysObject.QuestionList()[i].MatrixAnswers()[a].TextAnswer;
+										AnswersObj.NumericAnswer=.QuestionList()[i].MatrixAnswers()[a].NumericAnswer[m];
+										AnswersObj.TextAnswer=.QuestionList()[i].MatrixAnswers()[a].TextAnswer;
 										AnswersObj.QuestionNo=self.QuestionList()[i].QuestionNo();
 										AnswersObj.IsPage=self.QuestionList()[i].IsPage();
 										AnswersObj.ActionFlag = 1;
@@ -1207,51 +676,8 @@ var SurveysObject = function () {
 							 }
 						 }
 						
-						else if(((surveysObject.QuestionList()[i].IsMultiChoice()==1)||(surveysObject.QuestionList()[i].IsMultiChoice()==3) )&& surveysObject.QuestionList()[i].IsMultiChoice()!==undefined){
-							 for(var a=0; a<surveysObject.QuestionList()[i].NumericAnswerForMulti().length; a++){
-						 		AnswersObj = {};
-							 	AnswersObj.Username=homeModelObject.Username();
-								AnswersObj.IdSurvey=self.QuestionList()[i].IdSurvey();
-								AnswersObj.IdSurveyQuestions=self.QuestionList()[i].IdSurveyQuestions();
-								AnswersObj.StartTime = window.timeGlobal;
-								console.log("StartTime: "+AnswersObj.StartTime);
-								AnswersObj.AllowCantSayValue=self.QuestionList()[i].AllowCantSayValue().toString();
-								if(surveysObject.QuestionList()[i].IdQuestionType()=="7"){
-									AnswersObj.NumericAnswer=self.QuestionList()[i].NumericAnswer();
-									AnswersObj.TextAnswer=surveysObject.QuestionList()[i].NumericAnswerForMulti()[a];
-								}else{
-									AnswersObj.NumericAnswer=surveysObject.QuestionList()[i].NumericAnswerForMulti()[a];//self.QuestionList()[i].PageQuestions()[j].NumericAnswer();
-									AnswersObj.TextAnswer=self.QuestionList()[i].TextAnswer();
-								}
-								
-							
-								AnswersObj.QuestionNo=self.QuestionList()[i].QuestionNo();
-								AnswersObj.IsPage=self.QuestionList()[i].IsPage();
-								AnswersObj.ActionFlag = 1;
-								AnswersList.push(AnswersObj);
-							 }
-						 } 
 						 
-						 
-						 
-						 
-						 else if(self.QuestionList()[i].TextAnswer() !== undefined || self.QuestionList()[i].NumericAnswer() !== undefined){
-							AnswersObj = {};
-							AnswersObj.Username=homeModelObject.Username();
-							AnswersObj.IdSurvey=self.QuestionList()[i].IdSurvey();
-							AnswersObj.IdSurveyQuestions=self.QuestionList()[i].IdSurveyQuestions();
-							AnswersObj.StartTime = window.timeGlobal;
-							AnswersObj.AllowCantSayValue=self.QuestionList()[i].AllowCantSayValue().toString();
-							AnswersObj.NumericAnswer=self.QuestionList()[i].NumericAnswer();
-							AnswersObj.TextAnswer=self.QuestionList()[i].TextAnswer();
-							AnswersObj.QuestionNo=self.QuestionList()[i].QuestionNo();
-							AnswersObj.IsPage=self.QuestionList()[i].IsPage();
-							AnswersObj.ActionFlag = 1;
-							AnswersList.push(AnswersObj);
-						
-						}
-					}
-				}
+
 				
 				console.dir("AnswersList: "+AnswersList[0]);
 //				if(AnswersList[0] !== undefined){
@@ -1262,13 +688,13 @@ var SurveysObject = function () {
 				        cache: false,
 				        crossDomain: true,
 				        contentType: "application/json; charset=utf-8",
-				        url: urlString + "services/SurveyTempAnswers.xsjs",
+				        url: urlString + "services/.xsjs",
 				        type: 'POST',
 				        error: function (x, s, m) {
 				            
 				        },
 				        success: function (res) {
-				        	console.log("SurveyTempAnswers");
+				        	console.log("");
 				        	window.onbeforeunload = null;
 //				        	location.reload();
 				        }
@@ -1287,172 +713,20 @@ var SurveysObject = function () {
 	
 };
 
- 
-var SurveysObjectForApp = function() {
-	var self = this;
-    self.getListOfSurveysForApp = ko.observableArray();
-    self.getTitlesOfPulseSurvey = ko.observableArray();
-    self.resultOfPulseMySurveys = ko.observableArray();
-    self.IdSurvey = ko.observable();
-    self.IdSurveyQuestions = ko.observable();
-    self.TitlePulseSurvey = ko.observable();
-    self.IsActive = ko.observable();
-    self.isPulseSurvey = ko.observable();
-	self.getIdSurveyPulseReport = ko.observable();
-	
-    
-	self.getPulseSurveysByUser=function() {
-		$(document).off("ajaxStart");
-//		unbindSplashScreen();
-		var r = $.Deferred();
-  		 var params={};
-  			params.Username = homeModelObject.Username();
-  			$.ajax({
-  		        dataType: "json",
-  		        data: JSON.stringify(params), 
-  		        cache: false,
-  		        crossDomain: true,
-  		        url: urlString + "services/GetSurveysForApp.xsjs?action=1",
-  		        type: 'POST',
-  		        error: function (x, s, m) {
-  		            
-  		        },
-  		        success: function (res) {
-//  		        	console.log(res + "Surveys for Appppppppppppppppppppppppppppppppppp");
-  		        	self.getListOfSurveysForApp([]);
-  		        	self.getListOfSurveysForApp(res);
-  		        	r.resolve(res);
-  		        	
-  		        }
-  		    }).always(function() {
-  				 $('.loading').hide();
-  			  });
-  		return r;
-	}
-	
-	self.editPulseSurvey=function($data) {
-  		 var params={};
-  			params.Username = homeModelObject.Username();
-  			params.IdSurvey = $data.IdSurvey;
-  			$.ajax({
-  		        dataType: "json",
-  		        data: JSON.stringify(params), 
-  		        cache: false,
-  		        crossDomain: true,
-  		        url: urlString + "services/GetSurveysForApp.xsjs?action=3",
-  		        type: 'POST',
-  		        error: function (x, s, m) {
-  		        	homeModelObject.checkIfSessionExpired();
-  		        },
-  		        success: function (res) {
-  		        	self.getTitlesOfPulseSurvey(res);
-  		        	self.TitlePulseSurvey(res[0].surveyTitle);
-  		        	self.IsActive($data.IsActive);
-  		        	self.IdSurvey($data.IdSurvey);
-  		        	$.mobile.changePage($('#editMy_surveys'), { allowSamePageTransition: true });
-  		        	
-  		        }
-  		    });
-	}
-	
-	self.savePulseSurvey=function(){
- 		 var params={};
-			params.TitlePulseSurvey = $("#titlePulseSurvey").val();
-			params.updatedQuestions=[];
-			$(".allQuestionsIds").each(function(i,v){
-				params.updatedQuestions.push({id:v.id, title:$(v).val()});
-			});
-			console.log(params.updatedQuestions);
-			params.IdSurvey = self.IdSurvey();
-			if($("#checkboxIsActive").prop("checked")===true) {
-				params.IsActive = 1;
-			}else {
-				params.IsActive = 0;
-			}
-			
-			$.ajax({
-		        dataType: "json",
-		        data: JSON.stringify(params), 
-		        cache: false,
-		        crossDomain: true,
-		        url: urlString + "services/saveEditedPulseSurvey.xsjs?action=1",
-		        type: 'POST',
-		        error: function (x, s, m) {
-//		        	console.log(x);
-//		        	console.log(s);
-//		        	console.log(m);
-		        	homeModelObject.checkIfSessionExpired();
-		        },
-		        success: function () {
-		        	alert("You successfully change Pulse Survey ");
-		        	$.mobile.changePage($('#my_surveys'), { allowSamePageTransition: true });
-		        }
-		    });
-	} 
-	
-	self.resultPulseSurvey=function($data){
-		if($data.NumberAnsweredParticipant === 0){
-			alert("There are no answers for this Report!");
-		} else {
-		surveysObjectForApp.isPulseSurvey(1);
- 		 var params={};
-			params.Username = homeModelObject.Username();
-			params.IdSurvey = $data.IdSurvey;
-			$.ajax({
-		        dataType: "json",
-		        data: JSON.stringify(params), 
-		        cache: false,
-		        crossDomain: true,
-		        url: urlString + "services/GetSurveysForApp.xsjs?action=4",
-		        type: 'POST',
-		        error: function (x, s, m) {
-		        	homeModelObject.checkIfSessionExpired();
-		        },
-		        success: function (res) {
-		        	console.log(res);
-		        	self.getIdSurveyPulseReport(res[0].getIdSurveyPulseReport);
-		        	
-		        	surveyReports.GetCurrentChartData(self.getIdSurveyPulseReport(), 0).done(function(){
-		        		$.mobile.changePage($('#result_pulse_surveys'), { allowSamePageTransition: true });			
-		        	});
-		        }
-		    });
-		
-		}
-	} 
 
+ed;				
 
-	self.btnLinkSurvey = function($data){
-			console.log("Im in!!!");
-			// debugger;
-			var id = $data.IdSurvey();
-			var urlCopied = 'https://survey-ac4e94dbe.dispatcher.hana.ondemand.com/?id=' + id;
-			urlCopied.toString();		
-			var dummy = document.createElement("input");
-			document.body.appendChild(dummy);
-
-			dummy.setAttribute("id", "dummy_id");
-			document.getElementById("dummy_id").value = urlCopied;				
-			dummy.select();
- 			document.execCommand("copy");
-			dummy.setAttribute("type", "hidden");			
- 				
- 			$("#dummy_id").remove();
- 			// $("#spanspan").fadeIn(1000);
- 			// $("#spanspan").fadeOut(2000);
-			 Schortcut();
-	}
 };
 
-var SurveyQuestionObject = function() {
+varestionObject = function() {
     var self = this;
-    self.IdSurveyQuestions = ko.observable();
+    self. = ko.observable();
     self.QuestionNo = ko.observable();
     self.NextQuestionNo = ko.observable();
     self.PreviousQuestionNo = ko.observable();
     self.SkipToPageValue = ko.observable();
     self.SkipToPageId= ko.observable();
-    self.IdSurvey = ko.observable();
+    self. = ko.observable();
     self.IdQuestionType = ko.observable();           
     self.Title = ko.observable();
     self.Description = ko.observable();
@@ -1461,36 +735,13 @@ var SurveyQuestionObject = function() {
     self.RateFrom = ko.observable();
     self.RateTo = ko.observable();
     self.RateStep = ko.observable();
-    self.AllowCantSayValue = ko.observable();
-    self.AllowCantSay = ko.observable();
-    self.Username = ko.observable();
-    self.TextAnswer = ko.observable();
-    self.NumericAnswer = ko.observable();
-    self.NumericAnswerForMulti = ko.observableArray();
-    self.MatrixAnswers = ko.observableArray();
-    self.OptionEndSurveyValue = ko.observable();
-    self.QuestionOptions = ko.observableArray();
-    self.QuestionRatings = ko.observableArray();
-    self.IsPage = ko.observable();
-    self.PageQuestions = ko.observableArray();
-    self.StartTime = ko.observable();
-    self.EndTime = ko.observable();
-    self.IsSkippingQuestion=ko.observable(false);
-    self.IsMultiChoice = ko.observable();
-    self.HowManyDropdowns = ko.observable();
-    self.DropdownsOptions = ko.observableArray([]);    
-    self.DateFrom = ko.observable();
-    self.DateTo = ko.observable();
-    self.TextareaSmall = ko.observable();
+
 };
 
 var QuestionOptionObject = function(){
 	var self=this;	
 	self.Description = ko.observable();
-	self.IdSurveyOptions = ko.observable();
-	self.IdSurveyRatings = ko.observable();
-	self.IdSurveyQuestions = ko.observable();
-	self.OptionEndSurvey = ko.observable();
+
 	self.SkipToIdPage = ko.observable();
 	self.SkipToPageNumber = ko.observable();
 	self.Value = ko.observable();
@@ -1498,22 +749,11 @@ var QuestionOptionObject = function(){
 	self.TextDescription = ko.observable();
 };	
 
-/*var CurrentPageQuestionsObject = function(){
-	var self=this;	
-	self.IdSurveyQuestions = ko.observable();
-	self.TextAnswer = ko.observable();
-	self.NumericAnswer = ko.observable();
-	self.AllowCantSayValue = ko.observable();
-};	*/
+
 
 var CurrentQuestionObject = function(){
 	var self=this;
-	self.IdSurveyQuestions = ko.observable();
-	self.QuestionNo = ko.observable();
-	self.TotalQuestionNo = ko.observable();
-	self.NextQuestionNo = ko.observable();
-	self.PreviousQuestionNo = ko.observable();
-	self.IdSurvey = ko.observable();
+
 	self.IdQuestionType = ko.observable();
 	self.Title = ko.observable();
 	self.Description = ko.observable();
@@ -1522,29 +762,20 @@ var CurrentQuestionObject = function(){
     self.Username = ko.observable();
     self.RateFrom = ko.observable();
     self.RateTo = ko.observable();
-    self.RateStep = ko.observable();
-    self.TextAnswer = ko.observable();
-    self.NumericAnswer = ko.observable();
-    self.NumericAnswerForMulti = ko.observableArray();
-    self.OptionEndSurveyValue = ko.observable();
-    self.SkipToPageValue = ko.observable();
+
     self.SkipToPageId= ko.observable();
     self.QuestionOptions = ko.observableArray();
     self.QuestionRatings = ko.observableArray();
     self.IsAnonymous = ko.observable();
     self.IsTest = ko.observable();
-    self.IsPage = ko.observable();
-    self.PageQuestions = ko.observableArray();
-    self.EndSurveyDescription = ko.observable();
-    self.IsMultiChoice = ko.observable(false); 
-    self.HowManyDropdowns = ko.observable();
+
     self.DropdownsOptions = ko.observableArray([]);    
     self.DateFrom = ko.observable();
     self.DateTo = ko.observable();
     self.TextareaSmall = ko.observable();
     self.MatrixAnswers = ko.observableArray();
     
-    self.surveyCompletedPercentage =function() {
+    self.ompletedPercentage =function() {
     	
         return parseInt(self.QuestionNo()/self.TotalQuestionNo()*100)+ "%";
     };
@@ -1589,7 +820,7 @@ var CurrentQuestionObject = function(){
 	    	
 	    	if(currentQuestionObject.QuestionNo()==currentQuestionObject.TotalQuestionNo()){ //last question
 	        	if(currentQuestionObject.TextAnswer() || currentQuestionObject.AllowCantSayValue()){
-	    	   		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
+	    	   		var current_question = stionList(),"QuestionNo",.QuestionNo());
 	    	   		//var cantSay = $("#cantSayCheckBoxText").is(":checked");
 	    	   		
 	    	   		if(currentQuestionObject.AllowCantSayValue()){
@@ -1616,12 +847,10 @@ var CurrentQuestionObject = function(){
 	        	}
 	    	}
 	    	else{
-	//    		if(currentQuestionObject.AllowCantSay()==="1" && $("#cantSayCheckBoxText_" + currentQuestionObject.IdSurveyQuestions() + ":checked").is(":checked")){
-	//        		currentQuestionObject.TextAnswer(" ");
-	//        	}
+
 	        	
 	        	if(currentQuestionObject.TextAnswer()){
-	    			var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
+	    			var current_questiestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
 	    			current_question.TextAnswer(currentQuestionObject.TextAnswer());
 	    			current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
 	    			var previousQ=currentQuestionObject.QuestionNo();
@@ -1630,9 +859,9 @@ var CurrentQuestionObject = function(){
 	            		//Skip Logic
 	            		if((currentQuestionObject.SkipToPageValue()!=undefined && currentQuestionObject.SkipToPageValue()!=0)||currentQuestionObject.SkipToPageId()==-1){
 	            			var lastSkipedQuestion;
-	            			if(currentQuestionObject.SkipToPageId()==-1){//skip to end survey page
+	            			if(currentQuestionObject.SkipToPageId()==-1){//skip to end  page
 	            				lastSkipedQuestion=currentQuestionObject.TotalQuestionNo();
-	            			}else{ //skip to other survey page
+	            			}else{ //skip to other  page
 	            				currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
 	            				lastSkipedQuestion=currentQuestionObject.SkipToPageValue()-1;
 	            			}
@@ -1643,32 +872,22 @@ var CurrentQuestionObject = function(){
 	            			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
 	            				
 	            			
-	            				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-	            					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-	                					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
+	            				if(.QuestionList()[i].IsPage()=="1"){
+	            					for(y=0;y<.QuestionList()[i].PageQuestions().length;y++){
+	                					var IdQuestionType=.QuestionList()[i].PageQuestions()[y].IdQuestionType();
 	                					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-	                						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
+	                						if(.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
 	                							haveAnsweredQuestionsInSkippedPart=true;
 	                						}
 	                					}else{//simple text
-	                						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
+	                						if(.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
 	                							haveAnsweredQuestionsInSkippedPart=true;
 	                						}
 	                					}
 	                	
 	            				}
 	            				}else{
-	            					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-	
-	            					if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-	            						if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-	            							haveAnsweredQuestionsInSkippedPart=true;
-	            						}
-	            					}else{//simple text or text
-	            						if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-	            							haveAnsweredQuestionsInSkippedPart=true;
-	            						}
-	            					}
+	  
 	
 	            				}
 	            			}
@@ -1684,128 +903,11 @@ var CurrentQuestionObject = function(){
 		        					  str = "Your answer will skip some questions that you have alreday answered. Do you want to continue and delete answers from skipping part?";
 		        				  }
 	          				  
-	            				if(confirm(str)){
-	                    			  
-	            					var i,y;
-	                    			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
+
+	                    			if(currentQuestionObject.SkipToPageId()==-1){ //skip to end  page
+
 	
-	                    				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-	                    					
-	                    					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-	                    						
-	                    						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-	                    						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-	                    						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-	                    				}
-	                    				}else{
-	                    					
-	                    					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-	                    					surveysObject.QuestionList()[i].TextAnswer(undefined);
-	                    					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-	                    					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-	
-	                    				}
-	                    			}
-	                    			
-	                    			if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-	                            	   	
-	                        	   		window.history.pushState( "Title", "#feedbackInfo" );
-	                        			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-	                    			}else{//skip to other survey page
-	                    				
-	                    				
-	                    				var previousQ=currentQuestionObject.QuestionNo();
-	                            		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-	                    				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	                        			fillCurrentQuestionValues(question,previousQ);
-	                        			surveyNavigate();
-	                    			}
-	//                    			currentQuestionObject.SkipToPageValue(undefined);
-	//                    			currentQuestionObject.SkipToPageId(undefined);
-	            				}
-	            			}else{
-	            				console.log("haveAnsweredQuestionsInSkippedPart: "+haveAnsweredQuestionsInSkippedPart);
-	            				if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-	                        	   	
-	                    	   		window.history.pushState( "Title", "#feedbackInfo" );
-	                    			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-	                			}else{//skip to other survey page
-	                				
-	                				
-	                				var previousQ=currentQuestionObject.QuestionNo();
-	                        		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-	                				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	                    			fillCurrentQuestionValues(question,previousQ);
-	                    			surveyNavigate();
-	                			}
-	//                			currentQuestionObject.SkipToPageValue(undefined);
-	//                			currentQuestionObject.SkipToPageId(undefined);
-	            			}
-	            			
-	            		}
-	            		//Skip Logic End 	
-	            		else{
-	            			var previousQ=currentQuestionObject.QuestionNo();
-	                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-	        				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	            			fillCurrentQuestionValues(question,previousQ);
-	            			surveyNavigate();
-	            		}
-	            		
-	        		
-	    		}
-	    		else{
-	    			if(currentQuestionObject.AllowCantSay()==="1" && currentQuestionObject.AllowCantSayValue()){
-	    				
-	    				var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
-	    				current_question.TextAnswer(" ");
-	    				current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-	    				var previousQ=currentQuestionObject.QuestionNo();
-	    				
-	    				
-	    				//Skip Logic
-	            		if((currentQuestionObject.SkipToPageValue()!=undefined && currentQuestionObject.SkipToPageValue()!=0)||currentQuestionObject.SkipToPageId()==-1){
-	            			var lastSkipedQuestion;
-	            			if(currentQuestionObject.SkipToPageId()==-1){//skip to end survey page
-	            				lastSkipedQuestion=currentQuestionObject.TotalQuestionNo();
-	            			}else{ //skip to other survey page
-	            				currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
-	            				lastSkipedQuestion=currentQuestionObject.SkipToPageValue()-1;
-	            			}
-	            			
-	            			
-	            			var haveAnsweredQuestionsInSkippedPart=false;
-	            			var i,y;
-	            			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-	            				
-	            			
-	            				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-	            					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-	                					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-	                					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-	                						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-	                							haveAnsweredQuestionsInSkippedPart=true;
-	                						}
-	                					}else{//simple text
-	                						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-	                							haveAnsweredQuestionsInSkippedPart=true;
-	                						}
-	                					}
-	                	
-	            				}
-	            				}else{
-	            					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-	
-	            					if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-	            						if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-	            							haveAnsweredQuestionsInSkippedPart=true;
-	            						}
-	            					}else{//simple text or text
-	            						if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-	            							haveAnsweredQuestionsInSkippedPart=true;
-	            						}
-	            					}
-	
+	        
 	            				}
 	            			}
 	            			
@@ -1825,70 +927,11 @@ var CurrentQuestionObject = function(){
 	            					var i,y;
 	                    			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
 	
-	                    				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-	                    					
-	                    					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-	                    						
-	                    						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-	                    						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-	                    						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-	                    				}
-	                    				}else{
-	                    					
-	                    					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-	                    					surveysObject.QuestionList()[i].TextAnswer(undefined);
-	                    					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-	                    					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-	
-	                    				}
-	                    			}
-	                    			
-	                    			if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-	                            	   	
+	                 
 	                        	   		window.history.pushState( "Title", "#feedbackInfo" );
-	                        			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-	                    			}else{//skip to other survey page
-	                    				
-	                    				
-	                    				var previousQ=currentQuestionObject.QuestionNo();
-	                            		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-	                    				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	                        			fillCurrentQuestionValues(question,previousQ);
-	                        			surveyNavigate();
-	                    			}
-	//                    			currentQuestionObject.SkipToPageValue(undefined);
-	//                    			currentQuestionObject.SkipToPageId(undefined);
-	            				}
-	            			}else{
-	            				console.log("haveAnsweredQuestionsInSkippedPart: "+haveAnsweredQuestionsInSkippedPart);
-	            				if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-	                        	   	
-	                    	   		window.history.pushState( "Title", "#feedbackInfo" );
-	                    			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-	                			}else{//skip to other survey page
-	                				
-	                				
-	                				var previousQ=currentQuestionObject.QuestionNo();
-	                        		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-	                				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	                    			fillCurrentQuestionValues(question,previousQ);
-	                    			surveyNavigate();
-	                			}
-	//                			currentQuestionObject.SkipToPageValue(undefined);
-	//                			currentQuestionObject.SkipToPageId(undefined);
-	            			}
-	            			
+	            
 	            		}
-	            		//Skip Logic End 	
-	            		else{
-	            			var previousQ=currentQuestionObject.QuestionNo();
-	                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-	        				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	            			fillCurrentQuestionValues(question,previousQ);
-	            			surveyNavigate();
-	            		}
-	        				
-	        			
+	 
 	    				
 	    			}
 	    			else{
@@ -1911,54 +954,7 @@ var CurrentQuestionObject = function(){
 			}
 		});
     };
-    
-    self.feedbackInfo_back_click=function(){
-    	
-	    	homeModelObject.checkIfSessionExpired().done(function(data){	
-				if(homeModelObject.IsLoggedIn()){
-			    	
-					if(surveysObject.SurveyEndedByOption()===1){
-			    		currentQuestionObject.QuestionNo(currentQuestionObject.PreviousQuestionNo());
-			    	}
-			    	else{
-			    		
-			    	}
-			    	surveysObject.SurveyEndedByOption(0);
-			    	var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-			    	fillCurrentQuestionValues(current_question);
-			    	surveyNavigate();
-					    	
-				}else{
-					window.onbeforeunload = null;
-			}
-		});
-	    	
-    
-   };
-    
-    self.feedback_text_back_click=function(){
-    	
-    	homeModelObject.checkIfSessionExpired().done(function(data){	
-				if(homeModelObject.IsLoggedIn()){
-					
-					var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
-			    	if(currentQuestionObject.AllowCantSay()==="1" && $("#cantSayCheckBoxText_" + currentQuestionObject.IdSurveyQuestions() + ":checked").is(":checked") && currentQuestionObject.TextAnswer("")){
-			    		currentQuestionObject.TextAnswer(" ");
-			    	}
-			    	
-					current_question.TextAnswer(currentQuestionObject.TextAnswer());
-					
-			    	current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-			    	currentQuestionObject.QuestionNo(currentQuestionObject.PreviousQuestionNo());
-			    	var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			    	fillCurrentQuestionValues(question);
-			    	surveyNavigate();
-			
-							
-				}else{
-					window.onbeforeunload = null;
-			}
-		});
+
 		    	
 	
     };
@@ -1976,13 +972,7 @@ var CurrentQuestionObject = function(){
 		    	
 		    	// add cant say -> function checkRatingChange
 		
-		    	
-		    	if(currentQuestionObject.QuestionNo()==currentQuestionObject.TotalQuestionNo()){ //last question
-		        	if(currentQuestionObject.NumericAnswer() || currentQuestionObject.AllowCantSayValue()){
-		    	   		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		    	   		//var cantSay = $("#cantSayCheckBoxRating").is(":checked");
-		    	   		if(currentQuestionObject.AllowCantSayValue()){
-		    	   			current_question.NumericAnswer("-1");
+		  
 		    	   		}
 		    	   		else{
 		    	   			current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
@@ -2018,7 +1008,7 @@ var CurrentQuestionObject = function(){
 		
 		        	if(currentQuestionObject.NumericAnswer()){
 		        		
-		        		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
+		        		var current_question = .getObjectInArrayByKeyValue(.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
 		        		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
 		        		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
 		        		
@@ -2027,9 +1017,9 @@ var CurrentQuestionObject = function(){
 		        		//Skip Logic
 		        		if((currentQuestionObject.SkipToPageValue()!=undefined && currentQuestionObject.SkipToPageValue()!=0)||currentQuestionObject.SkipToPageId()==-1){
 		        			var lastSkipedQuestion;
-		        			if(currentQuestionObject.SkipToPageId()==-1){//skip to end survey page
+		        			if(currentQuestionObject.SkipToPageId()==-1){//skip to end  page
 		        				lastSkipedQuestion=currentQuestionObject.TotalQuestionNo();
-		        			}else{ //skip to other survey page
+		        			}else{ //skip to other  page
 		        				currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
 		        				lastSkipedQuestion=currentQuestionObject.SkipToPageValue()-1;
 		        			}
@@ -2039,33 +1029,7 @@ var CurrentQuestionObject = function(){
 		        			var i,y;
 		        			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
 		        				
-		        			
-		        				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-		        					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-		            					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-		            					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-		            						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-		            							haveAnsweredQuestionsInSkippedPart=true;
-		            						}
-		            					}else{//simple text
-		            						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-		            							haveAnsweredQuestionsInSkippedPart=true;
-		            						}
-		            					}
-		            	
-		        				}
-		        				}else{
-		        					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-		        					if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-		        						if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-		        							haveAnsweredQuestionsInSkippedPart=true;
-		        						}
-		        					}else{//simple text or text
-		        						if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-		        							haveAnsweredQuestionsInSkippedPart=true;
-		        						}
-		        					}
-		
+		        		
 		        				}
 		        			}
 		        			
@@ -2076,80 +1040,11 @@ var CurrentQuestionObject = function(){
 		          				  if(getCookie("lang")==="de"){
 		        					  str = "Ihre Antwort überspringt einige Fragen, die Sie bereits beantwortet haben. Möchten Sie fortfahren und Antworten löschen überspringt Teil";
 		        				  } else if(getCookie("lang")==="fr"){
-		        					  str = "Votre réponse est ignorer certaines questions auxquelles vous avez déjà répondu. Voulez-vous continuer et supprimer les réponses d'ignorer partie";
-		        				  }else {
-		        					  str = "Your answer will skip some questions that you have alreday answered. Do you want to continue and delete answers from skipping part?";
-		        				  }
-		        			
-		        				if(confirm(str)){
-		                			  
-		        					var i,y;
-		                			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-		
-		                				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-		                					
-		                					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-		                						
-		                						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-		                						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-		                						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-		                				}
-		                				}else{
-		                					
-		                					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-		                					surveysObject.QuestionList()[i].TextAnswer(undefined);
-		                					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-		                					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-		
-		                				}
-		                			}
-		                			
-		                			if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-		                        	   	
-		                    	   		window.history.pushState( "Title", "#feedbackInfo" );
-		                    			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		                			}else{//skip to other survey page
-		                				
-		                				
-		                				var previousQ=currentQuestionObject.QuestionNo();
-		                        		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		                				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                    			fillCurrentQuestionValues(question,previousQ);
-		                    			surveyNavigate();
-		                			}
-		//                			currentQuestionObject.SkipToPageValue(undefined);
-		//                			currentQuestionObject.SkipToPageId(undefined);
-		        				}
-		        			}else{
-		        				console.log("haveAnsweredQuestionsInSkippedPart: "+haveAnsweredQuestionsInSkippedPart);
-		        				if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-		                	   		window.history.pushState( "Title", "#feedbackInfo" );
-		                			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		                			
-		            			}else{//skip to other survey page
-		            				
-		            				var previousQ=currentQuestionObject.QuestionNo();
-		                    		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		            				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                			fillCurrentQuestionValues(question,previousQ);
-		                			surveyNavigate();
-		            			}
-		//            			currentQuestionObject.SkipToPageValue(undefined);
-		//            			currentQuestionObject.SkipToPageId(undefined);
+	fined);
 		        			}
 		        			
 		        		}
-		        		//Skip Logic End 	
-		        		else{
-		        			var previousQ=currentQuestionObject.QuestionNo();
-		            		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		    				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		        			fillCurrentQuestionValues(question,previousQ);
-		        			surveyNavigate();
-		        		}
-		        	}
-		        	else{
-		        		if (getCookie("lang")=='de'){
+		        
 		        			alert("Bitte wählen Sie Bewertung Wert!");
 		        		}
 		        		else if (getCookie("lang")=='fr'){
@@ -2184,25 +1079,7 @@ var CurrentQuestionObject = function(){
 					    			currentQuestionObject.NumericAnswer("-1");
 					    		}
 					    		else{
-					//    			currentQuestionObject.NumericAnswer($("#rating-value-feedback-rating").val());
-					    		}
-							}
-					    	
-						if(currentQuestionObject.NumericAnswer()){
-					    		
-					    		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-					    		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-					    		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-					    	}
-					    	currentQuestionObject.QuestionNo(currentQuestionObject.PreviousQuestionNo());
-					    	var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-					    	fillCurrentQuestionValues(question);
-					    	console.log(question);
-					    	surveyNavigate();
-					    	
-				}else{
-					window.onbeforeunload = null;
-			
+	
 				}
 			});
 	    };
@@ -2211,36 +1088,7 @@ var CurrentQuestionObject = function(){
 	    	homeModelObject.checkIfSessionExpired().done(function(data){	
 				if(homeModelObject.IsLoggedIn()){
 //debugger;					
-			    	// remove cant say
-			    	if(currentQuestionObject.AllowCantSay()==="1"&& ((currentQuestionObject.IsMultiChoice()==0 && (currentQuestionObject.NumericAnswer()==undefined||currentQuestionObject.NumericAnswer()=="-1")) || (currentQuestionObject.IsMultiChoice()!=0 && currentQuestionObject.NumericAnswerForMulti().length<currentQuestionObject.HowManyDropdowns()) || (currentQuestionObject.IsMultiChoice() != 0 && (currentQuestionObject.NumericAnswerForMulti()==undefined || currentQuestionObject.NumericAnswer()=="-1" || currentQuestionObject.NumericAnswerForMulti().length===0)))){  
-				    	currentQuestionObject.AllowCantSayValue(true);
-					}else{
-						currentQuestionObject.AllowCantSayValue(false);
-					}
-			    	
-			    	// add cant say
-			//    	if(currentQuestionObject.AllowCantSay()==="1"&& $("#cantSayCheckBoxOptions_" + currentQuestionObject.IdSurveyQuestions()).is(":checked")){  
-			//	    	currentQuestionObject.AllowCantSayValue(true);
-			//		}else{
-			//			currentQuestionObject.AllowCantSayValue(false);
-			//		}
-			    	
-			    		
-			    	if(currentQuestionObject.QuestionNo()==currentQuestionObject.TotalQuestionNo()){ //last question
-			        	if(currentQuestionObject.NumericAnswer()|| ((currentQuestionObject.NumericAnswerForMulti().length>0) && currentQuestionObject.IsMultiChoice()!=3 )||(currentQuestionObject.IsMultiChoice()==3 && currentQuestionObject.NumericAnswerForMulti().length==currentQuestionObject.HowManyDropdowns()) || currentQuestionObject.AllowCantSayValue()){
-			    	   		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			    	   		//var cantSay = $("#cantSayCheckBoxOptions").is(":checked");
-			    	   		if(currentQuestionObject.AllowCantSayValue()){
-				    			if(currentQuestionObject.IdQuestionType()==="7"){
-				    				current_question.TextAnswer(" ");
-				    			} else {
-				    				current_question.NumericAnswer("-1");
-				    			}
-			    	   			current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-
-			    	   		}
-			    	   		else if(currentQuestionObject.NumericAnswer()){
-			    	   			current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
+			    	/t.NumericAnswer());
 			    	   		}else if(currentQuestionObject.NumericAnswerForMulti().length>0){
 			    	   			
 			    	   			current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
@@ -2258,182 +1106,9 @@ var CurrentQuestionObject = function(){
 			         		}
 			        		
 			        		 else if (getCookie("lang")=='fr'){
-			        			alert("Sélectionnez option!");
-			        		} else {
-			        			alert("Please select option!");
-			        		}
-			        		 Validation();
-			        	}
-			    	}
-			    	else{
-			    		
-			    		if(currentQuestionObject.AllowCantSay()==="1"&&currentQuestionObject.AllowCantSayValue()){  
-			    			var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-			    			if(currentQuestionObject.IdQuestionType()==="7"){
-			    				current_question.TextAnswer(" ");
-			    			} else {
-			    				current_question.NumericAnswer("-1");
-			    			}
-			        		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-	                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-
-			        		var previousQ=currentQuestionObject.QuestionNo();
-			        		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-			        		
-			        		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			        		fillCurrentQuestionValues(question,previousQ);	
-			        		surveyNavigate();
-			
-			        	}
-			        	else{
-			        		if(((currentQuestionObject.NumericAnswer() || (currentQuestionObject.NumericAnswerForMulti().length>0)) && $('input[name=photo_questions_' + currentQuestionObject.IdSurveyQuestions() + ']:checked').val())||(currentQuestionObject.IsMultiChoice()==1 && currentQuestionObject.NumericAnswerForMulti().length>0)||(currentQuestionObject.IsMultiChoice()==3 && currentQuestionObject.NumericAnswerForMulti().length==currentQuestionObject.HowManyDropdowns())){  
-			        			if(currentQuestionObject.OptionEndSurveyValue()==="1"){
-			        				surveysObject.SurveyEndedByOption(1);
-			        				var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-			        				current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-			                		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-			                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-			                		current_question.OptionEndSurveyValue("1");
-			//        				currentQuestionObject.OptionEndSurveyValue("1");
-			//                		var previousQ=currentQuestionObject.QuestionNo();
-			        				currentQuestionObject.PreviousQuestionNo(currentQuestionObject.QuestionNo());
-			//                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());        		
-			//                		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			//                		fillCurrentQuestionValues(question,previousQ);
-			        				
-			        				//end Options
-			                		
-			                		var haveAnsweredQuestionsInEndSurveyPart=false;
-			        				var i,y;
-			        				var redirect = true;
-			        				for(i=currentQuestionObject.QuestionNo();i<currentQuestionObject.TotalQuestionNo();i++){
-			        					
-			        				
-			        					if(surveysObject.QuestionList()[i].IsPage()=="1"){
-			        						for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-			        	    					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-			        	    					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-			        	    						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-			        	    							haveAnsweredQuestionsInSkippedPart=true;
-			        	    						}
-			        	    					}else{//simple text
-			        	    						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-			        	    							haveAnsweredQuestionsInEndSurveyPart=true;
-			        	    						}
-			        	    					}
-			        	    	
-			        					}
-			        					}else{
-			        						var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-			
-			        						if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-			        							if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-			        								haveAnsweredQuestionsInEndSurveyPart=true;
-			        							}
-			        						}else{//simple text or text
-			        							if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-			        								haveAnsweredQuestionsInEndSurveyPart=true;
-			        							}
-			        						}
-			
-			        					}
-			        				}
-			        				
-			        				if(haveAnsweredQuestionsInEndSurveyPart){
-			        					if(confirm("Your answer will end the survey and any subsequent questions that you have already answered will be deleted. Do you want to continue?")){
-			        	        			
-			        						var i,y;
-			        	        			for(i=currentQuestionObject.QuestionNo();i<currentQuestionObject.TotalQuestionNo();i++){
-			
-			        	        				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-			        	        					
-			        	        					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-			        	        						
-			        	        						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-			        	        						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-			        	        						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-			        	        				}
-			        	        				}else{
-			        	        					
-			        	        					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-			        	        					surveysObject.QuestionList()[i].TextAnswer(undefined);
-			        	        					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-			        	        					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-			
-			        	        				}
-			        	        			}
-			//        	        			redirect = true;
-			        					} else {
-			        						redirect = false;
-			        					}
-			        				}
-			                		if(redirect){
-				        				window.history.pushState( "Title", "#feedbackInfo" );
-				            			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-				            			//self.EndSurveyByOption();
-			                		}
-			            		}
-			            		else{
-			            			var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-			            			if(current_question.IsMultiChoice()==0){
-	            				
-			            				current_question.NumericAnswer(currentQuestionObject.NumericAnswer());			            				
-			            			} else if((current_question.IsMultiChoice()==1)||(current_question.IsMultiChoice()==3)){
-			         
-			            				current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());			            				
-			            			}
-			                		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-			                		current_question.OptionEndSurveyValue("0");
-			
-			
-			                		//Skip Logic
-			                		if((currentQuestionObject.SkipToPageValue()!=undefined && currentQuestionObject.SkipToPageValue()!=0)||currentQuestionObject.SkipToPageId()==-1){
-			                			var lastSkipedQuestion;
-			                			if(currentQuestionObject.SkipToPageId()==-1){//skip to end survey page
-			                				lastSkipedQuestion=currentQuestionObject.TotalQuestionNo();
-			                			}else{ //skip to other survey page
-			                				currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
-			                				lastSkipedQuestion=currentQuestionObject.SkipToPageValue()-1;
-			                			}
-			                			
-			                			
-			                			var haveAnsweredQuestionsInSkippedPart=false;
-			                			var i,y;
-			                			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-			                				
-			                			
-			                				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-			                					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-			                    					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-			                    					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-			                    						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-			                    							haveAnsweredQuestionsInSkippedPart=true;
-			                    						}
-			                    					}else{//simple text
-			                    						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-			                    							haveAnsweredQuestionsInSkippedPart=true;
-			                    						}
-			                    					}
-			                    	
-			                				}
-			                				}else{
-			                					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-			
-			                					if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-			                						if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-			                							haveAnsweredQuestionsInSkippedPart=true;
-			                						}
-			                					}else{//simple text or text
-			                						if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-			                							haveAnsweredQuestionsInSkippedPart=true;
-			                						}
-			                					}
-			
-			                				}
-			                			}
-			                			
-			                			if(haveAnsweredQuestionsInSkippedPart){
-			                				
+			        	d any subsequent questions that you have already answered will be deleted. Do you want to continue?")){
+			        	stionList()[i].PageQuestions()[y].IdQuestionType();
+			   
 			    	            			var srt;
 			    	          				  if(getCookie("lang")==="de"){
 			    	        					  str = "Ihre Antwort überspringt einige Fragen, die Sie bereits beantwortet haben. Möchten Sie fortfahren und Antworten löschen überspringt Teil";
@@ -2441,75 +1116,7 @@ var CurrentQuestionObject = function(){
 			    	        					  str = "Votre réponse est ignorer certaines questions auxquelles vous avez déjà répondu. Voulez-vous continuer et supprimer les réponses d'ignorer partie";
 			    	        				  }else {
 			    	        					  str = "Your answer will skip some questions that you have alreday answered. Do you want to continue and delete answers from skipping part?";
-			    	        				  }
-			    	          				  
-			                				if(confirm(str)){
-			                        			  
-			                					var i,y;
-			                        			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-			
-			                        				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-			                        					
-			                        					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-			                        						
-			                        						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-			                        						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-			                        						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-			                        				}
-			                        				}else{
-			                        					
-			                        					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-			                        					surveysObject.QuestionList()[i].TextAnswer(undefined);
-			                        					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-			                        					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-			
-			                        				}
-			                        			}
-			                        			
-			                        			if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-			                                	   	
-			                            	   		window.history.pushState( "Title", "#feedbackInfo" );
-			                            			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-			                        			}else{//skip to other survey page
-			                        				
-			                        				
-			                        				var previousQ=currentQuestionObject.QuestionNo();
-			                                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-			                        				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			                            			fillCurrentQuestionValues(question,previousQ);
-			                            			surveyNavigate();
-			                        			}
-			//                        			currentQuestionObject.SkipToPageValue(undefined);
-			//                        			currentQuestionObject.SkipToPageId(undefined);
-			                				}
-			                			}else{
-			                				console.log("haveAnsweredQuestionsInSkippedPart: "+haveAnsweredQuestionsInSkippedPart);
-			                				if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-			                        	   		window.history.pushState( "Title", "#feedbackInfo" );
-			                        			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-			                        			
-			                    			}else{//skip to other survey page
-			                    				
-			                    				var previousQ=currentQuestionObject.QuestionNo();
-			                            		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-			                    				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			                        			fillCurrentQuestionValues(question,previousQ);
-			                        			surveyNavigate();
-			                    			}
-			//                    			currentQuestionObject.SkipToPageValue(undefined);
-			//                    			currentQuestionObject.SkipToPageId(undefined);
-			                			}
-			                			
-			                		}
-			                		//Skip Logic End 	
-			                		else{
-			                			var previousQ=currentQuestionObject.QuestionNo();
-			                    		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-			            				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			                			fillCurrentQuestionValues(question,previousQ);
-			                			surveyNavigate();
-			                		}
-			                		
+		
 			            		}
 			            	}
 			        		else{
@@ -2564,9 +1171,9 @@ var CurrentQuestionObject = function(){
 				}
 
 		    	
-		    	if(currentQuestionObject.QuestionNo()==currentQuestionObject.TotalQuestionNo()){ //last question
-		        	if((currentQuestionObject.MatrixAnswers().filter(String).length>0) || currentQuestionObject.AllowCantSayValue()){
-		    	   		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
+		    	if(.QuestionNo()==currentQuestionObject.TotalQuestionNo()){ //last question
+		        	if((.MatrixAnswers().filter(String).length>0) || currentQuestionObject.AllowCantSayValue()){
+		    	   		var current_question = .getObjectInArrayByKeyValue(.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
 		    	   		//var cantSay = $("#cantSayCheckBoxOptions").is(":checked");
 		    	   		
 		    	   		if(currentQuestionObject.AllowCantSayValue()){
@@ -2610,7 +1217,7 @@ var CurrentQuestionObject = function(){
 		    	}
 		    	else{
 		    		if(currentQuestionObject.AllowCantSay()==="1" && currentQuestionObject.AllowCantSayValue()){
-		        		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
+		        		var current_question = .getObjectInArrayByKeyValue(.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
 		        		current_question.NumericAnswer("-1");
 		        		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
 		        		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
@@ -2618,47 +1225,22 @@ var CurrentQuestionObject = function(){
 
 		        		var previousQ=currentQuestionObject.QuestionNo();
 		        		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		        		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
+		        		var question = .getObjectInArrayByKeyValue(.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
 		        		fillCurrentQuestionValues(question,previousQ);	
-		        		surveyNavigate();
+		        		();
 		
 		        	}
 		        	else{
 		        		if(currentQuestionObject.MatrixAnswers().filter(String).length>0){  
-		        			if(currentQuestionObject.OptionEndSurveyValue()==1){
-		            			//console.log("Ne moze dalje, option end survey e!");
-		            			surveysObject.SurveyEndedByOption(1);
-		        				var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
-		                		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-		                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-			    	   			current_question.MatrixAnswers(currentQuestionObject.MatrixAnswers());
-
-		                		current_question.OptionEndSurveyValue("1");
-		                		var previousQ=currentQuestionObject.QuestionNo();
-		                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());        		
-		                		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                		fillCurrentQuestionValues(question,previousQ);
-		                		
-		        				window.history.pushState( "Title", "#feedbackInfo" );
-		            			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		            		}
-		            		else{
-		            			var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
-		                		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-		                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-			    	   			current_question.MatrixAnswers(currentQuestionObject.MatrixAnswers());
+		        			if(currentQuestionObject.()==1){
+		            			//console.log("Ne moze dalje, option end  e!");
+		            			.(1);
+		        		());
 
 		                		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
 		                		
 		
-		                		
-		                		
-		                			var previousQ=currentQuestionObject.QuestionNo();
-		                    		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		            				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                			fillCurrentQuestionValues(question,previousQ);
-		                			surveyNavigate();
-		                		
+		                	
 		            		}
 		            	}
 		        		else{
@@ -2697,25 +1279,6 @@ var CurrentQuestionObject = function(){
 		    	if(currentQuestionObject.AllowCantSay()==="1"&&((currentQuestionObject.IsMultiChoice()==0 && (currentQuestionObject.NumericAnswer()==undefined||currentQuestionObject.NumericAnswer()=="-1"))||(currentQuestionObject.IsMultiChoice()!=0 && currentQuestionObject.NumericAnswerForMulti().length<currentQuestionObject.HowManyDropdowns()))){  
 			    	currentQuestionObject.AllowCantSayValue(true);
 				}else{
-					currentQuestionObject.AllowCantSayValue(false);
-				}
-		    	
-		    	// add cant say
-		//    	if(currentQuestionObject.AllowCantSay()==="1"&& $("#cantSayCheckBoxNumericRating_"+currentQuestionObject.IdSurveyQuestions()+":checked").is(":checked")){  
-		//	    	currentQuestionObject.AllowCantSayValue(true);
-		//		}else{
-		//			currentQuestionObject.AllowCantSayValue(false);
-		//		}
-		    	
-		    	
-		    	if(currentQuestionObject.QuestionNo()==currentQuestionObject.TotalQuestionNo()){ //last question
-		        	if(currentQuestionObject.NumericAnswer() || (currentQuestionObject.IsMultiChoice()==3 && currentQuestionObject.NumericAnswerForMulti().length==currentQuestionObject.HowManyDropdowns()) || currentQuestionObject.AllowCantSayValue()){
-		    	   		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		    	   		//var cantSay = $("#cantSayCheckBoxOptions").is(":checked");
-		    	   		
-		    	   		if(currentQuestionObject.AllowCantSayValue()){
-		    	   			current_question.NumericAnswer("-1");
-	                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
 
 
 		    	   		}
@@ -2751,178 +1314,7 @@ var CurrentQuestionObject = function(){
 		        			if (getCookie("lang")=='de'){
 			        			alert("Bitte wählen Sie Option!");
 			        		}
-			        		else if((getCookie("lang")=='fr')){
-			        			alert("Sélectionnez option!");
-			        		} else {
-			        			alert("Please select option!");
-			        		}
-		        		}
-		        		
-		        		
-		        		Validation();
-		        	}
-		    	}
-		    	else{
-		    		if(currentQuestionObject.AllowCantSay()==="1" && currentQuestionObject.AllowCantSayValue()){
-		        		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-		        		current_question.NumericAnswer("-1");
-		        		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-		        		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-		        		var previousQ=currentQuestionObject.QuestionNo();
-		        		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		        		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		        		fillCurrentQuestionValues(question,previousQ);	
-		        		surveyNavigate();
-		
-		        	}
-		        	else{
-		        		if((currentQuestionObject.NumericAnswer() && $('input[name=photo_questions_' + currentQuestionObject.IdSurveyQuestions() + ']:checked').val())|| (currentQuestionObject.IsMultiChoice()==3 && currentQuestionObject.NumericAnswerForMulti().length==currentQuestionObject.HowManyDropdowns())){  
-		        			if(currentQuestionObject.OptionEndSurveyValue()==1){
-		            			//console.log("Ne moze dalje, option end survey e!");
-		            			surveysObject.SurveyEndedByOption(1);
-		        				var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
-		                		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-		                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-		                		current_question.OptionEndSurveyValue("1");
-		                		var previousQ=currentQuestionObject.QuestionNo();
-		                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());        		
-		                		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                		fillCurrentQuestionValues(question,previousQ);
-		                		
-		        				window.history.pushState( "Title", "#feedbackInfo" );
-		            			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		            		}
-		            		else{
-		            			var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());		
-		                		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-		                		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());
-		                		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-		                		
-		
-		                		//Skip Logic
-		                		if((currentQuestionObject.SkipToPageValue()!=undefined && currentQuestionObject.SkipToPageValue()!=0)||currentQuestionObject.SkipToPageId()==-1){
-		                			var lastSkipedQuestion;
-		                			if(currentQuestionObject.SkipToPageId()==-1){//skip to end survey page
-		                				lastSkipedQuestion=currentQuestionObject.TotalQuestionNo();
-		                			}else{ //skip to other survey page
-		                				currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
-		                				lastSkipedQuestion=currentQuestionObject.SkipToPageValue()-1;
-		                			}
-		                			
-		                			
-		                			var haveAnsweredQuestionsInSkippedPart=false;
-		                			var i,y;
-		                			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-		                				
-		                			
-		                				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-		                					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-		                    					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-		                    					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-		                    						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-		                    							haveAnsweredQuestionsInSkippedPart=true;
-		                    						}
-		                    					}else{//simple text
-		                    						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-		                    							haveAnsweredQuestionsInSkippedPart=true;
-		                    						}
-		                    					}
-		                    	
-		                				}
-		                				}else{
-		                					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-		
-		                					if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-		                						if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-		                							haveAnsweredQuestionsInSkippedPart=true;
-		                						}
-		                					}else{//simple text or text
-		                						if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-		                							haveAnsweredQuestionsInSkippedPart=true;
-		                						}
-		                					}
-		
-		                				}
-		                			}
-		                			
-		                			if(haveAnsweredQuestionsInSkippedPart){
 
-		    	            				var srt;
-		    	          				  if(getCookie("lang")==="de"){
-		    	        					  str = "Ihre Antwort überspringt einige Fragen, die Sie bereits beantwortet haben. Möchten Sie fortfahren und Antworten löschen überspringt Teil";
-		    	        				  } else if(getCookie("lang")==="fr"){
-		    	        					  str = "Votre réponse est ignorer certaines questions auxquelles vous avez déjà répondu. Voulez-vous continuer et supprimer les réponses d'ignorer partie";
-		    	        				  }else {
-		    	        					  str = "Your answer will skip some questions that you have alreday answered. Do you want to continue and delete answers from skipping part?";
-		    	        				  }
-
-		                				if(confirm(str)){
-		                        			  
-		                					var i,y;
-		                        			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-		
-		                        				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-		                        					
-		                        					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-		                        						
-		                        						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-		                        						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-		                        						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-		                        				}
-		                        				}else{
-		                        					
-		                        					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-		                        					surveysObject.QuestionList()[i].TextAnswer(undefined);
-		                        					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-		                        					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-		
-		                        				}
-		                        			}
-		                        			
-		                        			if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-		                                	   	
-		                            	   		window.history.pushState( "Title", "#feedbackInfo" );
-		                            			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		                        			}else{//skip to other survey page
-		                        				
-		                        				
-		                        				var previousQ=currentQuestionObject.QuestionNo();
-		                                		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		                        				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                            			fillCurrentQuestionValues(question,previousQ);
-		                            			surveyNavigate();
-		                        			}
-		//                        			currentQuestionObject.SkipToPageValue(undefined);
-		//                        			currentQuestionObject.SkipToPageId(undefined);
-		                				}
-		                			}else{
-		                				console.log("haveAnsweredQuestionsInSkippedPart: "+haveAnsweredQuestionsInSkippedPart);
-		                				if(currentQuestionObject.SkipToPageId()==-1){ //skip to end survey page
-		                        	   		window.history.pushState( "Title", "#feedbackInfo" );
-		                        			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		                        			
-		                    			}else{//skip to other survey page
-		                    				
-		                    				var previousQ=currentQuestionObject.QuestionNo();
-		                            		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		                    				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                        			fillCurrentQuestionValues(question,previousQ);
-		                        			surveyNavigate();
-		                    			}
-		//                    			currentQuestionObject.SkipToPageValue(undefined);
-		//                    			currentQuestionObject.SkipToPageId(undefined);
-		                			}
-		                			
-		                		}
-		                		//Skip Logic End 	
-		                		else{
-		                			var previousQ=currentQuestionObject.QuestionNo();
-		                    		currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-		            				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-		                			fillCurrentQuestionValues(question,previousQ);
-		                			surveyNavigate();
-		                		}
-		            		}
 		            	}
 		        		else{
 		        			
@@ -2958,50 +1350,9 @@ var CurrentQuestionObject = function(){
 			}
 		});
     };   
-    self.feedback_options_back_click=function(){
-    	
+
     	homeModelObject.checkIfSessionExpired().done(function(data){	
-			if(homeModelObject.IsLoggedIn()){
-			  	var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());	
-		    	// remove cant say
-		    	//&& $("#cantSayCheckBoxNumericRating:checked").is(":checked")
-		    	if(currentQuestionObject.AllowCantSay()==="1" && currentQuestionObject.AllowCantSayValue()){  
-					current_question.NumericAnswer("-1");
-		    	}
-		    	else{
-		    		if(currentQuestionObject.NumericAnswer() && $('input[name=photo_questions_' + currentQuestionObject.IdSurveyQuestions() + ']:checked').val()){  
-		            	current_question.NumericAnswer(currentQuestionObject.NumericAnswer());
-		            	if((currentQuestionObject.NumericAnswerForMulti().length>0) && ($('input[name=photo_questions_' + currentQuestionObject.IdSurveyQuestions() + ']:checked').val() || currentQuestionObject.IsMultiChoice()==3)){
-		            		current_question.NumericAnswerForMulti(currentQuestionObject.NumericAnswerForMulti());		            		
-		            	}
-		    		}
-		    	}
-		    	current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());
-				currentQuestionObject.QuestionNo(currentQuestionObject.PreviousQuestionNo());
-				var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-				fillCurrentQuestionValues(question);	
-				surveyNavigate();
-		
-			}else{
-				window.onbeforeunload = null;
-			}
-		});
-    	
-    };
-    self.survey_page_next_click=function(){
-//    	debugger;
-    	homeModelObject.checkIfSessionExpired().done(function(data){	
-			if(homeModelObject.IsLoggedIn()){
-		    	console.log("survey_page_next_click");
-		    	var previousQ;
-		    	var okE = true;
-		    	var endSurvey = false;
-		    	var redirect=true;
-		    	$.each(currentQuestionObject.PageQuestions(), function(key, value) {
-		    		
-		    		console.log(value);
-		    		console.log(key);
-					if(value.IdQuestionType()==="6"){//simple text
+	tionType()==="6"){//simple text
 						if(value.SkipToPageValue()!=0){
 							currentQuestionObject.SkipToPageValue(value.SkipToPageValue());
 							currentQuestionObject.SkipToPageId(value.SkipToPageId());
@@ -3044,35 +1395,7 @@ var CurrentQuestionObject = function(){
 						 if(value.NumericAnswer()=="-1" && value.AllowCantSay()==="1" && value.AllowCantSayValue()===false){
 		    	   			value.NumericAnswer(undefined);
 		    	   			okE = false;
-		    	   		}
-						 else if(value.AllowCantSay()==="1"){
-							if(value.AllowCantSayValue()===true){
-								value.NumericAnswer("-1");
-								value.OptionEndSurveyValue(undefined);
-							}
-							else if((value.NumericAnswer()===undefined) && (value.NumericAnswerForMulti()===undefined || value.NumericAnswerForMulti().length===0)){
-								okE = false;
-							}
-						} 
-						else{
-							
-							if(value.NumericAnswer()===undefined &&((value.IsMultiChoice()!=3 && value.NumericAnswerForMulti().length===0 )||(value.IsMultiChoice()==3 && value.NumericAnswerForMulti().length<value.HowManyDropdowns()))){
-								okE = false;
-							}else{
-							}
-						}
-						 
-		//				 ace
-				     			if(value.OptionEndSurveyValue()==1){
-				         			console.log("Option end survey e!");
-				         			surveysObject.SurveyEndedByOption(1);
-				     				currentQuestionObject.OptionEndSurveyValue("1");
-				             		currentQuestionObject.PreviousQuestionNo(currentQuestionObject.QuestionNo());
-				             		
-				             		endSurvey=true;
-				         		}            						
-		
-					}
+
 					else if(value.IdQuestionType()==="4"){ //simple Rating
 						
 						// remove cant say
@@ -3150,179 +1473,17 @@ var CurrentQuestionObject = function(){
 				}
 				else{
 					
-			    	if(endSurvey){
+			    	if(end){
 			    		// ace ovde
 			    		//end Options
 			    		
-						var haveAnsweredQuestionsInEndSurveyPart=false;
-						var i,y;
-						for(i=currentQuestionObject.QuestionNo();i<currentQuestionObject.TotalQuestionNo();i++){
-							
-						
-							if(surveysObject.QuestionList()[i].IsPage()=="1"){
-								for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-			    					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-			    					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-			    						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-			    							haveAnsweredQuestionsInSkippedPart=true;
-			    						}
-			    					}else{//simple text
-			    						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-			    							haveAnsweredQuestionsInEndSurveyPart=true;
-			    						}
-			    					}
-			    	
-							}
-							}else{
-								var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-		
-								if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-									if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-										haveAnsweredQuestionsInEndSurveyPart=true;
-									}
-								}else{//simple text or text
-									if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-										haveAnsweredQuestionsInEndSurveyPart=true;
-									}
-								}
-		
-							}
-						}
-						
-						if(haveAnsweredQuestionsInEndSurveyPart){
-							if(confirm("Your answer will end the survey and any subsequent questions that you have already answered will be deleted. Do you want to continue?")){
-			        			
-								var i,y;
-			        			for(i=currentQuestionObject.QuestionNo();i<currentQuestionObject.TotalQuestionNo();i++){
-		
-			        				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-			        					
-			        					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-			        						
-			        						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-			        						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-			        						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-			        				}
-			        				}else{
-			        					
-			        					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-			        					surveysObject.QuestionList()[i].TextAnswer(undefined);
-			        					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-			        					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-		
-			        				}
-			        			}
-								
-							}else{
-								redirect = false;
-							}
-						}
-			    	}else{
-			    		var skipToEndSurveyPage;
-			    			
-			    		if((currentQuestionObject.SkipToPageValue()!=undefined && currentQuestionObject.SkipToPageValue()!=0)||currentQuestionObject.SkipToPageId()==-1){
-		        			var lastSkipedQuestion;
-		        			if(currentQuestionObject.SkipToPageId()==-1){//skip to end survey page
-		        				lastSkipedQuestion=currentQuestionObject.TotalQuestionNo();
-		        			}else{ //skip to other survey page
-		        				currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
-		        				lastSkipedQuestion=currentQuestionObject.SkipToPageValue()-1;
-		        			}
-								
-								var haveAnsweredQuestionsInSkippedPart=false;
-								var i,y;
-								for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-									
-								
-									if(surveysObject.QuestionList()[i].IsPage()=="1"){
-										for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-					    					var IdQuestionType=surveysObject.QuestionList()[i].PageQuestions()[y].IdQuestionType();
-					    					if(IdQuestionType==4 || IdQuestionType==5){ //simple rating or simple options
-					    						if(surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer()!=undefined){
-					    							haveAnsweredQuestionsInSkippedPart=true;
-					    						}
-					    					}else{//simple text
-					    						if(surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer()!=undefined){
-					    							haveAnsweredQuestionsInSkippedPart=true;
-					    						}
-					    					}
-					    	
-									}
-									}else{
-										var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-					
-										if(IdQuestionType==2 || IdQuestionType==3 || IdQuestionType==4 || IdQuestionType==5){ //rating or options or simple rating or simple options
-											if(surveysObject.QuestionList()[i].NumericAnswer()!=undefined){
-												haveAnsweredQuestionsInSkippedPart=true;
-											}
-										}else{//simple text or text
-											if(surveysObject.QuestionList()[i].TextAnswer()!=undefined){
-												haveAnsweredQuestionsInSkippedPart=true;
-											}
-										}
-					
-									}
-								}
-								
-								if(haveAnsweredQuestionsInSkippedPart){
-									
+	
+	
 			            				var srt;
 			          				  if(getCookie("lang")==="de"){
-			        					  str = "Ihre Antwort überspringt einige Fragen, die Sie bereits beantwortet haben. Möchten Sie fortfahren und Antworten löschen überspringt Teil";
-			        				  } else if(getCookie("lang")==="fr"){
-			        					  str = "Votre réponse est ignorer certaines questions auxquelles vous avez déjà répondu. Voulez-vous continuer et supprimer les réponses d'ignorer partie";
-			        				  }else {
-			        					  str = "Your answer will skip some questions that you have alreday answered. Do you want to continue and delete answers from skipping part?";
-			        				  }
-			          				  
-									if(confirm(str)){
-					        			
-										var i,y;
-					        			for(i=currentQuestionObject.QuestionNo();i<lastSkipedQuestion;i++){
-					
-					        				if(surveysObject.QuestionList()[i].IsPage()=="1"){
-					        					
-					        					for(y=0;y<surveysObject.QuestionList()[i].PageQuestions().length;y++){
-					        						
-					        						surveysObject.QuestionList()[i].PageQuestions()[y].NumericAnswer(undefined);
-					        						surveysObject.QuestionList()[i].PageQuestions()[y].TextAnswer(undefined);
-					        						surveysObject.QuestionList()[i].PageQuestions()[y].AllowCantSayValue(false);
-					        				}
-					        				}else{
-					        					
-					        					surveysObject.QuestionList()[i].NumericAnswer(undefined);
-					        					surveysObject.QuestionList()[i].TextAnswer(undefined);
-					        					surveysObject.QuestionList()[i].AllowCantSayValue(false);
-					        					var IdQuestionType=surveysObject.QuestionList()[i].IdQuestionType();
-					
-					        				}
+	
 					        			}
-										
-										
-					        			
-					        			
-					        			if(currentQuestionObject.SkipToPageId()==-1){
-											skipToEndSurveyPage=true;
-										}else{
-											currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
-							    			previousQ=currentQuestionObject.QuestionNo();
-										}
-		//			        			currentQuestionObject.SkipToPageValue(undefined);
-		//			        			currentQuestionObject.SkipToPageId(undefined);
-					        			
-									}else{
-										redirect = false;
-									}
-									
-									
-								}else{
-									console.log("haveAnsweredQuestionsInSkippedPart: "+haveAnsweredQuestionsInSkippedPart);
-									if(currentQuestionObject.SkipToPageId()==-1){
-										skipToEndSurveyPage=true;
-										
-									}else{
-										currentQuestionObject.NextQuestionNo(currentQuestionObject.SkipToPageValue());
-						    			previousQ=currentQuestionObject.QuestionNo();
+		ct.QuestionNo();
 									}
 									
 		//			    			currentQuestionObject.SkipToPageValue(undefined);
@@ -3330,35 +1491,7 @@ var CurrentQuestionObject = function(){
 									
 								}
 							}
-			    	}
-					
-			    	if(redirect){
-					console.log("okE=true!");
-					if(currentQuestionObject.QuestionNo()==currentQuestionObject.TotalQuestionNo()||skipToEndSurveyPage){
-						window.history.pushState( "Title", "#feedbackInfo" );
-		    			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-		    			
-			    	}
-					else{
-		//				ace
-						if(endSurvey!=false){
-		//					if(endSurveyOption.OptionEndSurveyValue() == undefined){
-		//						endSurveyOption.OptionEndSurveyValue("0");
-		//					}
-							if(currentQuestionObject.OptionEndSurveyValue() == "1"){
-								window.history.pushState( "Title", "#feedbackInfo" );
-			         			$.mobile.changePage('#feedbackInfo', { allowSamePageTransition: true });
-							}
-						}else {
-							var previousQ=currentQuestionObject.QuestionNo();
-							currentQuestionObject.QuestionNo(currentQuestionObject.NextQuestionNo());
-				    		var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-				    		console.log("previousQ: "+previousQ);
-				    		fillCurrentQuestionValues(question,previousQ);	
-				    		surveyNavigate();
-						}
-					}
-				}
+
 					
 				}
 		    	
@@ -3368,7 +1501,7 @@ var CurrentQuestionObject = function(){
 		});
    
     };
-    self.survey_page_back_click=function(){
+    selfpage_back_click=function(){
  //   	debugger;
     	homeModelObject.checkIfSessionExpired().done(function(data){	
 			if(homeModelObject.IsLoggedIn()){
@@ -3404,315 +1537,12 @@ var CurrentQuestionObject = function(){
 						if(value.AllowCantSay()==="1"){
 							if(value.AllowCantSayValue()===true){
 								value.NumericAnswer("-1");
-							}
-							/*else if(value.NumericAnswer()===undefined || value.NumericAnswer()==="-1"){
-								okE = false;
-							}*/
-						}
-					}
-			});
 
-	    	currentQuestionObject.QuestionNo(currentQuestionObject.PreviousQuestionNo());
-			var question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-			fillCurrentQuestionValues(question);	
-			surveyNavigate();
-		
-						
-			}else{
-				window.onbeforeunload = null;
-			}
-		});
-    	
-   
-    };
-    
-    self.DeleteSurveyTempAnswers = function() {
-    
-    	var params = {};
-	       	params.Username = homeModelObject.Username();
-	       	params.IdSurvey = surveysObject.QuestionList()[0].IdSurvey();
-	       	params.ActionFlag = 3;
-	       	
-	       	$.ajax({
-	   	        dataType: "json",
-	   	        data: JSON.stringify(params),
-	   	        cache: false,
-	   	        crossDomain: true,
-	   	        contentType: "application/json; charset=utf-8",
-	   	        url: urlString + "services/GetSurveyTempAnswers.xsjs",
-	   	        type: 'POST',
-	   	        error: function (x, s, m) {
-	   	            
-	   	        },
-	   	        success: function (res) {
-	   	        	console.log("deleted");
-	   	        }
-	   	    });
-	       	
-    };
-    
-    self.SaveFeedback=function(){  	  
-    	console.log("SaveFeedback");
-    	homeModelObject.checkIfSessionExpired().done(function(data){	
-    		console.log(homeModelObject.IsLoggedIn());
-    		if(homeModelObject.IsLoggedIn()){
-
-	   	/*if(currentQuestionObject.TextAnswer() || currentQuestionObject.NumericAnswer() || (currentQuestionObject.AllowCantSay()==="1" && (($("#cantSayCheckBoxOptions:checked").is(":checked")) || ($("#cantSayCheckBoxRating:checked").is(":checked")) || ($("#cantSayCheckBoxText:checked").is(":checked"))))){
-	   		var current_question = surveysObject.getObjectInArrayByKeyValue(surveysObject.QuestionList(),"QuestionNo",currentQuestionObject.QuestionNo());
-	   		var optionsCantSay = $("#cantSayCheckBoxOptions:checked").is(":checked");
-	   		var ratingCantSay = $("#cantSayCheckBoxRating:checked").is(":checked");
-	   		var textCantSay = $("#cantSayCheckBoxText:checked").is(":checked");
-	   			   		
-	   		if(currentQuestionObject.NumericAnswer()){	    			
-	    		current_question.NumericAnswer(currentQuestionObject.NumericAnswer());	    		    			    			    	
-	    	}else{	    		
-	    		current_question.TextAnswer(currentQuestionObject.TextAnswer());
-	    	}
-	   		if(optionsCantSay || ratingCantSay){
-	   			current_question.NumericAnswer("-1");
-	   		}
-	   		if(textCantSay){
-	   			current_question.TextAnswer(" ");
-	   		}
-	   		current_question.AllowCantSayValue(currentQuestionObject.AllowCantSayValue());*/
-	   		var idSurveyUserDefinition;	//za ako ne e anonymous da se zacuva!!!
-	   		
-	   		self.SendSurvey();
-	   		self.DeleteSurveyTempAnswers();
-	   		
-//	   		self.SaveSurveyUserDefinition().done(function(data){	
-//	   			
-//	   			if(surveysObject.SurveyEndedByOption()===1){
-//	   				console.log("Survey TEST or ended from option!");
-////	   				self.SaveSurveyAnswers(data).done(function(){
-//		   				resetViewModelObject(currentQuestionObject);
-//			   			resetViewModelObject(surveysObject);
-//			   			surveysObject.IdSurvey(undefined);
-//			   			window.onbeforeunload = null;
-//			   			//location.reload();
-//			   			window.history.pushState("Title", "#surveyEnd" );
-//						$.mobile.changePage($('#surveyEnd'), { allowSamePageTransition: true });
-////	   				});
-//	   			
-//	   			
-//	   			}
-//	   			else{
-//	   				self.SaveSurveyAnswers(data).done(function(){
-//	   					resetViewModelObject(currentQuestionObject);
-//	   		   			resetViewModelObject(surveysObject);
-//	   		   			surveysObject.IdSurvey(undefined);
-//	   		   			window.onbeforeunload = null;
-//	   					//location.reload();
-//		   		   		window.history.pushState("Title", "#surveyEnd" );
-//						$.mobile.changePage($('#surveyEnd'), { allowSamePageTransition: true });
-//	   					});
-//	   			}
-//	   		}
-//	   		);
-//	   		
-//	   		self.DeleteSurveyTempAnswers();
-	   		
-
-	   		
-		}
-    	else{
-    		window.onbeforeunload = null;
-    	}
-    });
-
-
-   };	
-   
-   self.SendSurvey=function(){
-   	var r = $.Deferred();
-//   	var token = localStorage.getItem('t');
-//   	if(token){
-//   	debugger;
-   	var params={}, idCountryParam,paramsList=[];
-   	idCountryParam=homeModelObject.IdCountry()?homeModelObject.IdCountry():322;
-   		params.IdSurvey=self.IdSurvey();    	
-		params.IdCountry=idCountryParam;
-		params.Username = homeModelObject.Username();
-		params.Department = homeModelObject.StreetAddress1();
-		params.Division = homeModelObject.Company();
-		params.EmployeeManagerType = homeModelObject.EmployeeManagerType();
-		params.SurveyStartOn = new Date();
-		params.SurveyFinishedOn = new Date();
-		params.IsAnonymous = self.IsAnonymous();
-		params.Email=homeModelObject.Email();
-		if(surveysObject.SurveyEndedByOption()){
-			params.SurveyEndedByOption=surveysObject.SurveyEndedByOption();
-
-		}else{
-			params.SurveyEndedByOption=0;
-
-		}
-		if(surveysObject.IdSurveyType()==="1"){
-			params.ManagerUsername=homeModelObject.ManagerUsername();
-		}else{
-			params.ManagerUsername=null;
-		}
-		
-		for(x=0;x<surveysObject.QuestionList().length;x++){
-    		if(surveysObject.QuestionList()[x].IsPage()==="1" && surveysObject.QuestionList()[x].PageQuestions().length>0){
-    			$.each(surveysObject.QuestionList()[x].PageQuestions(), function(index, value) {		
-    				if(((surveysObject.QuestionList()[x].PageQuestions()[index].IsMultiChoice()==1)||(surveysObject.QuestionList()[x].PageQuestions()[index].IsMultiChoice()==3)) && surveysObject.QuestionList()[x].PageQuestions()[index].NumericAnswerForMulti().length != 0){ 
-    					for(var a=0; a<surveysObject.QuestionList()[x].PageQuestions()[index].NumericAnswerForMulti().length; a++){
-							// debugger;
-    						var val = surveysObject.QuestionList()[x].PageQuestions()[index].NumericAnswerForMulti()[a].toString()
-							if(val.indexOf(".")!= -1){
-								console.log(value)
-								tempParams={};
-								tempParams.IdSurveyQuestions=value.IdSurveyQuestions();
-								tempParams.IdQuestionType=value.IdQuestionType();
-//								debugger;
-								if(surveysObject.QuestionList()[x].PageQuestions()[index].IdQuestionType()=="7")
-								{
-									tempParams.NumericAnswer = null;
-									tempParams.TextAnswer = value.NumericAnswerForMulti()[a].substring(value.NumericAnswerForMulti()[a].indexOf(".") + 1);
-
-								}else{
-									tempParams.TextAnswer = null;
-									tempParams.NumericAnswer = value.NumericAnswerForMulti()[a].substring(value.NumericAnswerForMulti()[a].indexOf(".") + 1);
-
-								}
-								
-								tempParams.IsTest=surveysObject.IsTest();
-								paramsList.push(tempParams); 
-								console.log(paramsList);
-							}else {
-								console.log(value);
-								tempParams={};
-								tempParams.IdSurveyQuestions= value.IdSurveyQuestions();//surveysObject.QuestionList()[x].IdSurveyQuestions();
-								tempParams.IdQuestionType= value.IdQuestionType();//surveysObject.QuestionList()[x].IdQuestionType();
-//								debugger;
-								if(surveysObject.QuestionList()[x].PageQuestions()[index].IdQuestionType()=="7")
-								{
-									tempParams.NumericAnswer = null;
-									tempParams.TextAnswer = surveysObject.QuestionList()[x].PageQuestions()[index].NumericAnswerForMulti()[a];//  value.NumericAnswer();
-		
-								}else{
-
-									tempParams.TextAnswer = null;
-									tempParams.NumericAnswer = surveysObject.QuestionList()[x].PageQuestions()[index].NumericAnswerForMulti()[a];//  value.NumericAnswer();
-		
-								}
-								
-								tempParams.IsTest=surveysObject.IsTest();
-								paramsList.push(tempParams); 
-							}
-
-    					}
-    				}else if(value.MatrixAnswers().filter(String).length>0){
-    					value.MatrixAnswers().forEach(function(element) {
-        					
-    						element.NumericAnswer.forEach(function(numAnswer) {
-    							tempParams={};
-    							tempParams.IdSurveyQuestions=value.IdSurveyQuestions();
-    							tempParams.IdQuestionType=value.IdQuestionType();
-    							tempParams.TextAnswer = element.TextAnswer;
-    							tempParams.NumericAnswer = numAnswer;
-    							tempParams.IsTest=surveysObject.IsTest();
-    							paramsList.push(tempParams); 
-
-    						});
-
-        					
-        				});
-    					
-    				}else if(value.TextAnswer() || value.NumericAnswer()){    
-    					tempParams={};
-    					tempParams.IdSurveyQuestions=value.IdSurveyQuestions();
-    					tempParams.IdQuestionType=value.IdQuestionType();
-    					tempParams.TextAnswer = value.TextAnswer() ? value.TextAnswer() : null;
-    					tempParams.NumericAnswer = value.NumericAnswer() ? value.NumericAnswer() : null;
-    					tempParams.IsTest=surveysObject.IsTest();
-                		paramsList.push(tempParams); 
-    				}else {
-    					tempParams={};
-    					tempParams.IdSurveyQuestions=value.IdSurveyQuestions();
-    					tempParams.IdQuestionType=value.IdQuestionType();
-    					tempParams.TextAnswer = null;
-    					tempParams.NumericAnswer = null;
-    					tempParams.IsTest=surveysObject.IsTest();
-                		paramsList.push(tempParams);
-    				}
-   		}); 	
-    		}
-    		else{
-    			console.log(surveysObject.QuestionList()[x].IsMultiChoice());
- //   			 debugger; 
-    			tempParams={};
-    			if(surveysObject.QuestionList()[x].TextAnswer() || surveysObject.QuestionList()[x].NumericAnswerForMulti().length>0){
-    				if((((surveysObject.QuestionList()[x].IsMultiChoice()==1)||(surveysObject.QuestionList()[x].IsMultiChoice()==3))) && surveysObject.QuestionList()[x].NumericAnswerForMulti().length != 0){
-//    					$.each(surveysObject.QuestionList()[x].NumericAnswerForMulti(), function( index, value ) {
-    						for(var index=0;index<surveysObject.QuestionList()[x].NumericAnswerForMulti().length;index++){
-    							var value=surveysObject.QuestionList()[x].NumericAnswerForMulti()[index].toString();
-    						
-							console.log(surveysObject.QuestionList()[x].NumericAnswerForMulti()[index])
-							if(surveysObject.QuestionList()[x].NumericAnswerForMulti()[index]){
-								console.log(value)
-								tempParams={};
-								tempParams.IdSurveyQuestions=surveysObject.QuestionList()[x].IdSurveyQuestions();
-								tempParams.IdQuestionType=surveysObject.QuestionList()[x].IdQuestionType();
-//								debugger;
-								if(tempParams.IdQuestionType=="7")
-								{
-									tempParams.NumericAnswer = null;
-									tempParams.TextAnswer = value.substring(value.indexOf(".") + 1);
-								}else{
-
-									tempParams.TextAnswer = null;
-									console.log(value);
-									tempParams.NumericAnswer = value.substring(value.indexOf(".") + 1);
-								}
-								tempParams.IsTest=surveysObject.IsTest();
-								paramsList.push(tempParams); 
-								console.log(paramsList);
-							} else {
-								tempParams={};
-								tempParams.IdSurveyQuestions=surveysObject.QuestionList()[x].IdSurveyQuestions();
-								tempParams.IdQuestionType=surveysObject.QuestionList()[x].IdQuestionType();
-								tempParams.TextAnswer = null;
-								tempParams.NumericAnswer = value;
 	
-								tempParams.IsTest=surveysObject.IsTest();
-								paramsList.push(tempParams); 
-								console.log(paramsList);
-							}
-    					}
-//    					);
-    				}else {   
-    					tempParams={};
-    					tempParams.IdSurveyQuestions=surveysObject.QuestionList()[x].IdSurveyQuestions();
-    					tempParams.IdQuestionType=surveysObject.QuestionList()[x].IdQuestionType();
-    					tempParams.TextAnswer = surveysObject.QuestionList()[x].TextAnswer() ? surveysObject.QuestionList()[x].TextAnswer() : null;
-    					tempParams.NumericAnswer = surveysObject.QuestionList()[x].NumericAnswer() ? surveysObject.QuestionList()[x].NumericAnswer() : null;
-    					
-    					tempParams.IsTest=surveysObject.IsTest();
+    lue.substring(value.indexOf(".") + 1);
+	
     					paramsList.push(tempParams);  
-    				}
-    			}else if(surveysObject.QuestionList()[x].MatrixAnswers().filter(String).length>0){
-    				surveysObject.QuestionList()[x].MatrixAnswers().forEach(function(element) {
-    					
-						element.NumericAnswer.forEach(function(numAnswer) {
-							tempParams={};
-							tempParams.IdSurveyQuestions=surveysObject.QuestionList()[x].IdSurveyQuestions();
-							tempParams.IdQuestionType=surveysObject.QuestionList()[x].IdQuestionType();
-							tempParams.TextAnswer = element.TextAnswer;
-							tempParams.NumericAnswer = numAnswer;
-							tempParams.IsTest=surveysObject.IsTest();
-							paramsList.push(tempParams); 
-
-						});
-
-    					
-    				});
-    				
-    			}
-    		}
-    		      		
-    	}
+    	
 		params.Answers=paramsList;
 //		console.log(params.Answers);
 		
@@ -3720,65 +1550,11 @@ var CurrentQuestionObject = function(){
 		$.ajax({
 	        dataType: "json",
 	        data: JSON.stringify(params),
-	        cache: false,
-	        crossDomain: true,
-	        contentType: "application/json; charset=utf-8",
-	        url: urlString + "services/SendSurvey.xsjs",
-	        type: 'POST',
-	        error: function (x, s, m) {
-	        },
-	        success: function (res) {	 
-	        	if(res.SURVEYCANBESAVED==0){
-	        		 if (getCookie("lang")=='de'){
+
 			 				alert("Bereits fertiggestellt haben Sie diesen Fragebogen aus! Ihre Antworten werden nicht gesichert!");
-			 			}
-			    		 else if(getCookie("lang")=='fr'){
-			    			alert("Vous avez déjà terminé cette enquête ! Vos réponses ne seront pas sauvegardées!")
-						}else {
-							alert("You've already completed this survey! Your answers will not be saved!")
-						}
-	        	}else{
-	        		console.log(res.SURVEYCANBESAVED);
-	        		
-	        	}
-	        	
-	        	
-	        	resetViewModelObject(currentQuestionObject);
-		   			resetViewModelObject(surveysObject);
-		   			surveysObject.IdSurvey(undefined);
-		   			window.onbeforeunload = null;
-					//location.reload();
-   		   		window.history.pushState("Title", "#surveyEnd" );
-   		   		engagePulseSurveys.isPulseSurvey(0);
-				$.mobile.changePage($('#surveyEnd'), { allowSamePageTransition: true });
-	        	
-	        	r.resolve(res);	        	
-	        }
-	    });
-		return r;
-   };
-   
-   
-   
-   
-//    self.SaveSurveyUserDefinition=function(IdUserDefinition){
-//    	var r = $.Deferred();
-////    	var token = localStorage.getItem('t');
-////    	if(token){
-//    	var params={}, idCountryParam;
-//    	idCountryParam=homeModelObject.IdCountry()?homeModelObject.IdCountry():322;
-//    	params.IdSurvey=self.IdSurvey();    	
-//		params.IdCountry=idCountryParam;
-//		params.Username = homeModelObject.Username();
-//		params.Department = homeModelObject.StreetAddress1();
-//		params.Division = homeModelObject.Company();
-//		params.SurveyStartOn = new Date();
-//		params.SurveyFinishedOn = new Date();
-//		params.IsAnonymous = self.IsAnonymous();
-//		params.Email=homeModelObject.Email();
-//		if(surveysObject.IdSurveyType()==="1"){
-//			params.ManagerUsername=homeModelObject.ManagerUsername();
-//		}
+
+
+
 //		console.log(params);
 //		$.ajax({
 //	        dataType: "json",
@@ -3786,68 +1562,12 @@ var CurrentQuestionObject = function(){
 //	        cache: false,
 //	        crossDomain: true,
 //	        contentType: "application/json; charset=utf-8",
-//	        url: urlString + "services/InsertSurveyUserDefinition.xsjs",
-//	        type: 'POST',
-//	        error: function (x, s, m) {
-//	        },
-//	        success: function (res) {	        	
-//	        	r.resolve(res);	        	
-//	        }
-//	    });
-////    	}
-//		return r;
-//    };
-//    self.SaveSurveyAnswers=function(surveyUserDefinition){
-//    	var r = $.Deferred();
-//    	homeModelObject.checkIfSessionExpired().done(function(data){	
-//			if(homeModelObject.IsLoggedIn()){
-//		    	console.log('vratena survey definition');
-//		    	console.log(surveyUserDefinition);
-//		    	if(surveyUserDefinition.SurveyCanBeSaved==1){
-//		    		var IdSurveyDefinition=surveyUserDefinition.IdSurveyUserDefinition,x=0,params={},paramsList=[];    	
-//		        	for(x=0;x<surveysObject.QuestionList().length;x++){
-//		        		if(surveysObject.QuestionList()[x].IsPage()==="1" && surveysObject.QuestionList()[x].PageQuestions().length>0){
-//		        			$.each(surveysObject.QuestionList()[x].PageQuestions(), function(index, value) {	
-//		        				params={};
-//		        				if(value.TextAnswer() || value.NumericAnswer()){
-//			        				params.IdSurveyQuestions=value.IdSurveyQuestions();
-//			        				params.IdSurveyUserDefinition=IdSurveyDefinition;
-//			                		params.IdQuestionType=value.IdQuestionType();
-//			                		params.Answer = value.TextAnswer() ? value.TextAnswer() : value.NumericAnswer();
-//			                		params.IsTest=surveysObject.IsTest();
-//			                		paramsList.push(params);  
-//		        				}
-//		        			});
-//		        		}
-//		        		else{
-//		        			params={};
-//		        			if(surveysObject.QuestionList()[x].TextAnswer() || surveysObject.QuestionList()[x].NumericAnswer()){
-//			        			params.IdSurveyQuestions=surveysObject.QuestionList()[x].IdSurveyQuestions();
-//			            		params.IdSurveyUserDefinition=IdSurveyDefinition;
-//			            		params.IdQuestionType=surveysObject.QuestionList()[x].IdQuestionType();
-//			            		params.Answer = surveysObject.QuestionList()[x].TextAnswer() ? surveysObject.QuestionList()[x].TextAnswer() : surveysObject.QuestionList()[x].NumericAnswer();
-//			            		params.IsTest=surveysObject.IsTest();
+//urveysObject.QuestionList()[x].PageQuestions().length>0){
+//	;
 //			            		paramsList.push(params);  
 //		        			}
 //		        		}
-//		        		      		
-//		        	}
-//		        	console.log(paramsList);
-//		        	$.ajax({
-//		    	        dataType: "json",
-//		    	        data: JSON.stringify(paramsList),    	        
-//		    	        cache: false,
-//		    	        crossDomain: true,
-//		    	        contentType: "application/json; charset=utf-8",
-//		    	        url: urlString + "services/InsertSurveyAnswer.xsjs",
-//		    	        type: 'POST',
-//		    	        error: function (x, s, m) {
-//		    	            
-//		    	        },
-//		    	        success: function (res) {	        	
-//		    	        	console.log("Survey Completed");
-//		    	        	r.resolve(res);	
-//		    	        }
+//
 //		    	    });
 //		    	}
 //		    	else{
