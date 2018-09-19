@@ -1,5 +1,5 @@
 /*global escape: true */
-$.import("SurveyRocks.services","utils");
+$.import(".services","utils");
 var obj,body;
 if($.request.body){
 	body = $.request.body.asString();
@@ -7,17 +7,17 @@ if($.request.body){
 }
 var username = $.session.getUsername();
 var action = $.request.parameters.get("action");
-var procedureCallStatement1 = "call \"GetExistingSurveysForUser\"(?)";
-var procedureCallStatement2="call \"InsertCopyOfSurvey\"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-var procedureCallStatement3="select \"Title\" from \"Survey.Survey\" where \"Title\" like ?||'%' and \"IsArchived\"=0";
-var getMasterSurveys = "call \"GetExistingMasterSurveysForUser\"(?)";
+var procedureCallStatement1 = "call \"GetExistorUser\"(?)";
+var procedureCallStatement2="call \"InsertCopyO\"(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+var procedureCallStatement3="select \"Title\" from \".\" where \"Title\" like ?||'%' and \"IsArchived\"=0";
+var getMast = "call \"GetExistingMastsForUser\"(?)";
 
 
 
 
 var CallService=function(){			
-		var connection = $.db.getConnection($.SurveyRocks.services.utils.SurveyRocksUtils.ConnectionName);  
-		connection.prepareStatement("SET SCHEMA "  + $.SurveyRocks.services.utils.SurveyRocksUtils.SchemaName).execute();  
+		var connection = $.db.getConnection($..services.utils..ConnectionName);  
+		connection.prepareStatement("SET SCHEMA "  + $..services.utils..SchemaName).execute();  
 		var statement = null,resultSet = null,code = 0,resultList=[],resultObject={};		
 		try{	
 			
@@ -31,16 +31,11 @@ var CallService=function(){
 		            while(resultSet.next()) { 
 		            	resultObject={};
 		            	
-		            	resultObject.IdSurvey=resultSet.getInteger(1);
-		            	resultObject.IdSurveyType=resultSet.getInteger(2);
+		            	resultObject.IdS=resultSet.getInteger(1);
+		            	resultObject.Ie=resultSet.getInteger(2);
 		            	resultObject.Description=resultSet.getNString(3);
 		            	resultObject.IsAnonymous=resultSet.getInteger(6);
-		            	resultObject.IsPublic=resultSet.getInteger(7);
-		            	resultObject.Title=resultSet.getNString(9);
-		            	resultObject.SurveyTreshold=resultSet.getInteger(10);
-		            	resultObject.IsArchived=resultSet.getInteger(13);
-		            	resultObject.TextTreshold=resultSet.getInteger(15);
-		            	resultObject.EndDescription=resultSet.getNString(16);
+
 						resultObject.Disclaimer=resultSet.getNString(17);
 		            	
 		            	
@@ -58,7 +53,7 @@ var CallService=function(){
 				break;
 			case 2:
 				var IsAnonymousParam=0,IsArchivedParam=0,IsPublicParam=0,IsActiveParam=0,
-				IsTestParam=0,SurveyTresholdParam=0,TextTresholdParam=0,Disclaimer='';
+				IsTestParam=0,TextTresholdParam=0,Disclaimer='';
 				statement = connection.prepareCall(procedureCallStatement2);
 				if(obj.IsAnonymous){
 					IsAnonymousParam=obj.IsAnonymous===true?1:0;
@@ -72,8 +67,8 @@ var CallService=function(){
 				if(obj.IsTest){
 					IsTestParam=obj.IsTest===true?1:0;
 				}
-				if(obj.SurveyTreshold){
-					SurveyTresholdParam=parseInt(obj.SurveyTreshold,10);
+				if(obj.eshold){
+					resholdParam=parseInt(obj.eshold,10);
 				}
 				if(obj.TextTreshold){
 					TextTresholdParam=parseInt(obj.TextTreshold,10);
@@ -81,8 +76,8 @@ var CallService=function(){
 				if(obj.IsArchived){
 					IsArchivedParam=parseInt(obj.IsArchived,10);
 				}
-				if(obj.IdSurveyType === 5){
-					//statement.setInteger(1,parseInt(obj.IdSurvey,10));
+				if(obj.Type === 5){
+					//statement.setInteger(1,parseInt(obj.y,10));
 					
 					statement.setNull(2);
 					statement.setNull(3);
@@ -91,18 +86,12 @@ var CallService=function(){
 					statement.setInteger(6,IsPublicParam);
 					statement.setInteger(7,IsActiveParam);
 					statement.setNString(8,obj.Title);
-					statement.setInteger(9,SurveyTresholdParam);
-					statement.setInteger(10,IsTestParam);
-					statement.setNString(11,username);
-					statement.setInteger(12,IsArchivedParam);
-					statement.setInteger(13,parseInt(obj.SelectedIdSurvey,10));
-					statement.setInteger(14,TextTresholdParam);
-					statement.setInteger(15,parseInt(obj.IdSurveyType,10));
+			
 					statement.setNull(16);
 					statement.setInteger(17,parseInt(obj.IsMasterOrClone,10));
 					statement.setNull(18);
 				} else {					
-					//statement.setInteger(1,parseInt(obj.IdSurvey,10));
+;
 					statement.setNString(2,obj.Description);
 					statement.setNString(3,obj.DateFrom);
 					statement.setNString(4,obj.DateUntil);
@@ -110,13 +99,10 @@ var CallService=function(){
 					statement.setInteger(6,IsPublicParam);
 					statement.setInteger(7,IsActiveParam);
 					statement.setNString(8,obj.Title);
-					statement.setInteger(9,SurveyTresholdParam);
+
 					statement.setInteger(10,IsTestParam);
 					statement.setNString(11,username);
-					statement.setInteger(12,IsArchivedParam);
-					statement.setInteger(13,parseInt(obj.SelectedIdSurvey,10));
-					statement.setInteger(14,TextTresholdParam);
-					statement.setInteger(15,parseInt(obj.IdSurveyType,10));
+
 					if(obj.EndDescription===null){
 						statement.setNull(16);
 					}else{
@@ -132,7 +118,7 @@ var CallService=function(){
 				statement.execute(); 
 				var idsurvey=statement.getInteger(1);
 					 resultObject={};
-					resultObject.IdSurvey=idsurvey;
+					resultObject.=;
 				connection.commit();			
 				$.response.contentType = "application/json";			    
 			    $.response.headers.set("access-control-allow-headers","Origin, X-Requested-With, Content-Type, Accept");
@@ -160,7 +146,7 @@ var CallService=function(){
 					break;
 					
 			case 4:
-				statement = connection.prepareCall(getMasterSurveys);	
+				statement = connection.prepareCall(getMaste);	
 				statement.setString(1, username);
 				if(statement.execute()) { 		         
 			        do { 
@@ -168,15 +154,12 @@ var CallService=function(){
 			            while(resultSet.next()) { 
 			            	resultObject={};
 			            	
-			            	resultObject.IdSurvey=resultSet.getInteger(1);
-			            	resultObject.IdSurveyType=resultSet.getInteger(2);
+			            	resultObject.=resultSet.getInteger(1);
+			            	resultObject.=resultSet.getInteger(2);
 			            	resultObject.Description=resultSet.getNString(3);
 			            	resultObject.IsAnonymous=resultSet.getInteger(6);
 			            	resultObject.IsPublic=resultSet.getInteger(7);
-			            	resultObject.Title=resultSet.getNString(9);
-			            	resultObject.SurveyTreshold=resultSet.getInteger(10);
-			            	resultObject.IsArchived=resultSet.getInteger(13);
-			            	resultObject.TextTreshold=resultSet.getInteger(15);
+			   
 			            	resultObject.EndDescription=resultSet.getNString(16);
 							resultObject.Disclaimer=resultSet.getNString(18);
 			            	
@@ -198,7 +181,7 @@ var CallService=function(){
 		 catch (e) {
 			 	$.response.contentType = "application/json";			   
 			    $.response.headers.set("access-control-allow-headers","Origin, X-Requested-With, Content-Type, Accept");
-			    code = $.SurveyRocks.services.utils.SurveyRocksUtils.getStatusCode(e.message);
+			    code = $..services.utils..getStatusCode(e.message);
 			    if (code && code === 301) {
 			        $.response.setBody('unique constraint violated');
 			    } else {
@@ -208,7 +191,7 @@ var CallService=function(){
 
 			}
 		finally{
-			$.SurveyRocks.services.utils.SurveyRocksUtils.close([resultSet, statement, connection]);  
+			$..services.utils..close([resultSet, statement, connection]);  
 		}				  		
 };
 
