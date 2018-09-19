@@ -1,8 +1,8 @@
 /*global escape: true */
 /*jslint nomen: true*/
 var method = $.request.headers["1"].value;
-$.import("SurveyRocks.services","utils");
-var obj,body,IdSurvey;
+$.import(".services","utils");
+var obj,body,Id;
 if($.request.body){
 	body = $.request.body.asString();
 	obj = JSON.parse(body);
@@ -11,8 +11,8 @@ if($.request.body){
 
 
 var schemaName = "SURVEYROCKS";
-var IdSurvey = $.request.parameters.get("id");
-//$.trace.error("id survey of headerot "+IdSurvey);
+var Id = $.request.parameters.get("id");
+//$.trace.error("id survey of headerot "+Id);
 
 
 
@@ -42,13 +42,13 @@ var Respond = function(msg){
 //		        	resultSet  = statement.getResultSet(); 
 //		            while(resultSet.next()) { 
 //		            	resultObject={};
-//		            	resultObject.IdSurveyOptions=resultSet.getNString(1);
-//		            	resultObject.IdSurveyImages=resultSet.getNString(2);
+//		            	resultObject.=resultSet.getNString(1);
+//		            	resultObject.=resultSet.getNString(2);
 //		            	resultObject.Description=resultSet.getNString(3);
 //		            	resultObject.Value=resultSet.getNString(4);		            	
 //		            	resultObject.TextDescription=resultSet.getNString(5);		            	
 //		            	resultList.push(resultObject);		            
-////		            	$.trace.error("GetQuestionsOptions resultList"+resultList.IdSurveyOptions);
+////		            	$.trace.error("GetQuestionsOptions resultList"+resultList.);
 //		            } 		            
 //		        } while (statement.getMoreResults());	       	  
 //				}
@@ -64,26 +64,26 @@ var Respond = function(msg){
 //};
 //
 //
-//var GetQuestionsList=function(IdSurvey){
-//	var connection = $.db.getConnection("SurveyRocks.services.api::services");  
+//var GetQuestionsList=function(){
+//	var connection = $.db.getConnection(".services.api::services");  
 //	connection.prepareStatement("SET SCHEMA "  + "SURVEYROCKS").execute();   
 //	var statement = null,resultSet = null,resultObject={},resultList=[];
 //	try{			
 //			statement = connection.prepareCall(procedureCallStatement12);	
-//			statement.setInteger(1, parseInt(IdSurvey,10));
+//			statement.setInteger(1, parseInt(,10));
 //
 //			if(statement.execute()) { 		         
 //		        do { 
 //		        	resultSet  = statement.getResultSet(); 
 //		            while(resultSet.next()) { 
 //		            	resultObject={};
-//		            	resultObject.IdSurveyQuestions=resultSet.getNString(1);
+//		            	resultObject.=resultSet.getNString(1);
 //		            	resultObject.IdQuestionType=resultSet.getNString(2);
 //		            	resultObject.Title=resultSet.getNString(3);
 //		            	resultObject.RateFrom=resultSet.getNString(4);
 //		            	resultObject.RateTo=resultSet.getNString(5);
 //		            	resultObject.RateStep=resultSet.getNString(6);
-//		            	resultObject.QuestionOptions=GetQuestionsOptions(resultObject.IdSurveyQuestions);
+//		            	resultObject.QuestionOptions=GetQuestionsOptions(resultObject.);
 //		            	resultList.push(resultObject);
 //
 //		            } 		            
@@ -102,7 +102,7 @@ var Respond = function(msg){
 //};
 //
 //var CallService=function(){			
-//		var connection = $.db.getConnection("SurveyRocks.services.api::services");  
+//		var connection = $.db.getConnection(".services.api::services");  
 //		connection.prepareStatement("SET SCHEMA "  + "SURVEYROCKS").execute();   
 //		var statement = null,resultSet = null,code = 0,resultObject={};		
 //		try{		
@@ -110,17 +110,17 @@ var Respond = function(msg){
 //				
 //				
 //				statement = connection.prepareCall(procedureCallStatementt);	
-//				statement.setInteger(1,parseInt(obj.IdSurvey,10));
+//				statement.setInteger(1,parseInt(obj.,10));
 //				statement.execute();
 //				resultSet  = statement.getResultSet();
 //				
 //				while (resultSet.next()) {
 //					
 //					resultObject={};			            				            				            	
-//	            	resultObject.IdSurvey=resultSet.getNString(1);
-//	            	resultObject.SurveyTitle=resultSet.getNString(2);
+//	            	resultObject.=resultSet.getNString(1);
+//	            	resultObject.=resultSet.getNString(2);
 //	            	
-//	            	resultObject.Questions=GetQuestionsList(resultObject.IdSurvey);	
+//	            	resultObject.Questions=GetQuestionsList(resultObject.);	
 //				}
 //				
 //				connection.commit();	
@@ -129,9 +129,9 @@ var Respond = function(msg){
 //			    var body ;
 //			    
 //			    body = {
-//			    		"Survey": [{
-//			    			"SurveyId": resultObject.IdSurvey,
-//			    			"SurveyTitle": resultObject.SurveyTitle,
+//			    		"": [{
+//			    			"": resultObject.,
+//			    			"": resultObject.,
 //			    			 "Questions":resultObject.Questions    				
 //			    		}]
 //			    };
@@ -155,7 +155,7 @@ var Respond = function(msg){
 //		 catch (e) {
 //			 	$.response.contentType = "application/json";
 //			    $.response.headers.set("access-control-allow-headers","Origin, X-Requested-With, Content-Type, Accept");
-//			    code = $.SurveyRocks.services.utils.SurveyRocksUtils.getStatusCode(e.message);
+//			    code = $..services.utils..getStatusCode(e.message);
 //			    if (code && code === 301) {
 //			        $.response.setBody('unique constraint violated');
 //			    } else {
@@ -165,7 +165,7 @@ var Respond = function(msg){
 //
 //			}
 //		finally{
-//			$.SurveyRocks.services.utils.SurveyRocksUtils.close([resultSet, statement, connection]);  
+//			$..services.utils..close([resultSet, statement, connection]);  
 //		}				  		
 //};
 //
@@ -173,11 +173,11 @@ var Respond = function(msg){
 //CallService();	
 
 
-var GetQuestionsOptions = function(idSurveyQuestion){
+var GetQuestionsOptions = function(){
 	var rs = null,connection=null,statement=null, tempObj={}, resultObj;
-	connection = $.hdb.getConnection({sqlcc:"SurveyRocks.services.api::services"});
-	statement = connection.loadProcedure(schemaName,"GetOptionsByIdSurveyQuestionsDetails");
-	rs=statement(idSurveyQuestion);
+	connection = $.hdb.getConnection({sqlcc:".services.api::services"});
+	statement = connection.loadProcedure(schemaName,"");
+	rs=statement();
 	resultObj = rs['$resultSets'][0];
 	var tempArr=[];
 	for (var key in resultObj){
@@ -188,17 +188,17 @@ var GetQuestionsOptions = function(idSurveyQuestion){
 };
 
 
-var GetQuestionsList = function(idSurvey){
+var GetQuestionsList = function(){
 	var rs = null,connection=null,statement=null, tempObj={}, resultObj,i=0,o={};
-	connection = $.hdb.getConnection({sqlcc:"SurveyRocks.services.api::services"});
-	statement = connection.loadProcedure(schemaName,"GetSurveyQuestionsDetails");
-	rs=statement(idSurvey);
+	connection = $.hdb.getConnection({sqlcc:".services.api::services"});
+	statement = connection.loadProcedure(schemaName,"");
+	rs=statement();
 	resultObj = rs['$resultSets'][0];
 	
 	var retArr=[];
 	for (var key in resultObj){
 		tempObj={};
-		tempObj.IdSurveyQuestions = resultObj[key].IdSurveyQuestions;
+		tempObj. = resultObj[key].;
 		tempObj.QuestionType = resultObj[key].QuestionType;
 		tempObj.Title = resultObj[key].Title;
 		tempObj.RateFrom = resultObj[key].RateFrom;
@@ -208,7 +208,7 @@ var GetQuestionsList = function(idSurvey){
 		tempObj.AllowCantSay = resultObj[key].AllowCantSay;
 		tempObj.HowManyDropdowns = resultObj[key].HowManyDropdowns;
 		if(tempObj.HowManyDropdowns == 0){
-			tempObj.QuestionOptions = GetQuestionsOptions(resultObj[key].IdSurveyQuestions)	
+			tempObj.QuestionOptions = GetQuestionsOptions(resultObj[key].)	
 			tempObj.DropdownsOptions=[];
 		}else {
 			tempObj.QuestionOptions = [];
@@ -218,7 +218,7 @@ var GetQuestionsList = function(idSurvey){
 	    		o={};
 	    		o.ddlOrderNumber= i;
 	    		tempObj.QuestionOptions.IsSelected=false;
-	    		o.ddlQuestionOptions=GetQuestionsOptions(resultObj[key].IdSurveyQuestions);
+	    		o.ddlQuestionOptions=GetQuestionsOptions(resultObj[key].);
 	    		tempObj.DropdownsOptions.push(o);
 	    	}
 		}
@@ -229,17 +229,17 @@ var GetQuestionsList = function(idSurvey){
 };
 
 
-var getSurveyData = function(idSurvey){
+var  = function(){
 	var rs = null,connection=null,statement=null;
-	connection = $.hdb.getConnection({sqlcc:"SurveyRocks.services.api::services"});
-	statement = connection.loadProcedure(schemaName,"GetDetailsSurvey");
-	rs=statement(idSurvey);
+	connection = $.hdb.getConnection({sqlcc:".services.api::services"});
+	statement = connection.loadProcedure(schemaName,"GetDetai");
+	rs=statement();
 		
 	var retObject = {
-		"Survey":{
-			"SurveyId": rs['$resultSets'][0][0].IdSurvey,
-			"SurveyTitle": rs['$resultSets'][0][0].SurveyTitle,
-			"Questions": GetQuestionsList(rs['$resultSets'][0][0].IdSurvey)
+		
+			"": rs['$resultSets'][0][0].,
+			"": rs['$resultSets'][0][0].,
+			"Questions": GetQuestionsList(rs['$resultSets'][0][0].)
 		}	
 	}
 
@@ -248,7 +248,7 @@ var getSurveyData = function(idSurvey){
 
 var callXS = function(){
 try{
-	var data = getSurveyData(IdSurvey);
+	var data = ge
 	$.response.contentType = "application/json";
 	//$.response.contentType = "text/plain";
 	$.response.headers.set('Access-Control-Allow-Origin','*');    
@@ -264,7 +264,7 @@ try{
 	$.response.headers.set('access-control-allow-methods','POST,GET, OPTIONS');
 	$.response.headers.set("access-control-allow-headers","Origin, X-Requested-With, Content-Type, Accept");  
     $.response.status = $.net.http.OK;
-    $.response.setBody(JSON.stringify(getSurveyData));
+    $.response.setBody(JSON.stringify());
 //	$.trace.error(e.toString())
 }
 };
